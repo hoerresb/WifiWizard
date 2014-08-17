@@ -6,7 +6,7 @@
 	version="0.1.0">
 
     <name>WifiWizard</name>
-    <description>This plugin allows Phonegap applications to add WiFi networks and connect to them.</description>
+    <description>This plugin allows Phonegap applications to manage Wifi connections.</description>
 	<author>Matt Parsons</author>
 	<keywords>phonegap,network,wifi</keywords>
     <license>Apache 2.0 License</license>
