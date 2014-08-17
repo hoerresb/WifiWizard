@@ -10,6 +10,7 @@
 	<author>Matt Parsons</author>
 	<keywords>phonegap,network,wifi</keywords>
     <license>Apache 2.0 License</license>
+	<repo>https://github.com/parsonsmatt/WifiWizard/</repo>
 
 	<asset src="www/WifiWizard.js" target="WifiWizard.js" />
 	
