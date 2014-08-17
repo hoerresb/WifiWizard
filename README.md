@@ -3,7 +3,7 @@ WifiWizard
 
 Version 0.1.0
 
-This Phonegap plugin enables WiFi management from within Phonegap.
+This Phonegap plugin enables WiFi management from within Phonegap. It is currently in development, but unusuable at this time.
 
 ### Usage from within Cordova:
 
