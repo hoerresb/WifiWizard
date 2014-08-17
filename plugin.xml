@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	id="com.pylonproducts.wifiwizard"
+	version="0.1.0">
+
+    <name>WifiWizard</name>
+    <description>This plugin allows Phonegap applications to add WiFi networks and connect to them.</description>
+	<author>Matt Parsons</author>
+	<keywords>phonegap,network,wifi</keywords>
+    <license>Apache 2.0 License</license>
+
+	<asset src="www/WifiWizard.js" target="WifiWizard.js" />
+	
+    <js-module src="www/WifiWizard.js" name="WifiWizard">
+        <clobbers target="wifi" />
+    </js-module>
+
+    <platform name="android">
+		<source-file src="src/android/src/com/pylonproducts/wifiwizard/WifiWizard.java" 
+					 target-dir="src/com/pylonproducts/wifiwizard" />
+		<config-file target="AndroidManifest.xml" parent="/*">
+			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+			<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+		</config-file>
+    </platform>
+    
+</plugin>
