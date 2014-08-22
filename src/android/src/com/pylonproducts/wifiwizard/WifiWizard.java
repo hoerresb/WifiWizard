@@ -72,6 +72,7 @@ public class WifiWizard extends CordovaPlugin {
 	
 	/**
 	 * This methods adds a network to the list of available WiFi networks.
+	 * If the network already exists, then it updates it.
 	 * 
 	 * @params callbackContext 	A Cordova callback context.
 	 * @params data				JSON Array with [0] == SSID, [1] == password
@@ -81,6 +82,8 @@ public class WifiWizard extends CordovaPlugin {
 		// Initialize the WifiConfiguration object
 		WifiConfiguration wifi = new WifiConfiguration();
 		String authType = data.getString(2);
+		
+		// TODO: Check if network exists, if so, then do an update instead.
 		
 		if (authType.equals("WPA")) {
 			// TODO: connect/configure for WPA
@@ -123,25 +126,17 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network removed, false if failed
 	 */
 	private boolean removeNetwork(CallbackContext callbackContext, JSONArray data) {
-		if (data == null || data[0] == null) {
+		if (data == null || data.get(0) == null) {
 			callbackContext.error("Data is null.");
 			return false;
 		}
 		
-		String ssidToDisconnect = data[0];
+		// TODO: Verify the type of data!
+		String ssidToDisconnect = data.get(0);
 		
-		List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
-		int numberOfNetworks = currentNetworks.size();
-		int networkIdToRemove = -1;
-		WifiConfiguration test;
+
 		
-		// For each network in the list, compare the SSID with the given one
-		for (int i = 0; i < numberOfNetworks; i++) {
-			test = currentNetworks.get(i);
-			if (test.SSID.equals(ssidToDisconnect)) {
-				networkIdToRemove = test.networkId;
-			}
-		}
+		int networkIdToRemove = ssidToNetworkId(ssidToDisconnect);
 		
 		if (networkIdToRemove > 0) {
 			wifiManager.removeNetwork(networkIdToRemove);
@@ -163,7 +158,25 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network connected, false if failed
 	 */
 	private boolean connectNetwork(CallbackContext callbackContext, JSONArray data) {
-	
+		if (data == null || data.get(0) == null) {
+			callbackContext.error("Data is null.");
+			return false;
+		}
+		
+		// TODO: Verify type of data here!
+		String ssidToConnect = data.get(0);
+		
+		int networkIdToConnect = ssidToNetworkId(ssidToConnect);
+		
+		if (networkIdToConnect > 0) {
+			wifiManager.enableNetwork(networkIdToConnect, true);
+			callbackContext.success("Network " + ssidToConnect + " connected!");
+			return true;
+		}
+		else {
+			callbackContext.error("Network " + ssidToConnect + " not found!");
+			return false;
+		}
 	}
 	
 	/**
@@ -187,5 +200,27 @@ public class WifiWizard extends CordovaPlugin {
 	 */
 	private boolean listNetworks(CallbackContext callbackContext, JSONArray data) {
 	
+	}
+	
+	/**
+	 *	This method takes a given String, searches the current list of configured WiFi
+	 * 	networks, and returns the networkId for the netowrk if the SSID matches. If not,
+	 * 	it returns -1.
+	 */
+	private int ssidToNetworkId(String ssid) {
+		List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
+		int numberOfNetworks = currentNetworks.size();
+		int networkId;
+		WifiConfiguration test;
+		
+		// For each network in the list, compare the SSID with the given one
+		for (int i = 0; i < numberOfNetworks; i++) {
+			test = currentNetworks.get(i);
+			if (test.SSID.equals(ssid)) {
+				networkId = test.networkId;
+			}
+		}
+		
+		return networkId;
 	}
 }
