@@ -39,24 +39,30 @@ public class WifiWizard extends CordovaPlugin {
 		
 		this.callbackContext = callbackContext;
 		
+		// First make sure wifi is enabled
+		if (!wifiManager.isWifiEnabled()) {
+			callbackContext.error("Wifi is not enabled.");
+			return false;
+		}
+		
 		if (action.equals(ADD_NETWORK)) {
 			return this.addNetwork(callbackContext, data);
 		}
 	
 		else if (action.equals(REMOVE_NETWORK)) {
-			// TODO: Remove network
+			return this.removeNetwork(callbackContext, data);
 		}
 	
 		else if (action.equals(CONNECT_NETWORK)) {
-			// TODO: Connect to network
+			return this.connectNetwork(callbackContext, data);
 		}
 
 		else if (action.equals(DISCONNECT_NETOWRK)) {
-			// TODO: Disconnect from network
+			return this.connectNetwork(callbackContext, data);
 		}
 		
 		else if (action.equals(LIST_NETWORKS)) {
-			// TODO: Return list of networks
+			return this.connectNetwork(callbackContext, data);
 		}
 		
 		return false;	
@@ -81,13 +87,17 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		else if (authType.equals("WEP")) {
 			// TODO: connect/configure for WEP
+			// or not? screw wep
+			
+			callbackContext.error("WEP unsupported");
+			return false;
 		}
 		// TODO: Add more authentications as necessary
 		else {
 			log.d(TAG, "Wifi Authentication Type Not Supported.");
 		}
 		
-		// Currently, just assuming WPA. 
+		// Currently, just assuming WPA, as that is the only one that is supported.
 		wifi.SSID = data.getString(0);
 		wifi.preSharedKey = data.getString(1);
 		wifi.status = WifiConfiguration.Status.ENABLED;        
@@ -100,7 +110,47 @@ public class WifiWizard extends CordovaPlugin {
 	
 		wifiManager.addNetwork();
 		wifiManager.saveConfiguration();
+		return true;
 	}
 	
-	private 
+	/**
+	 *	This method removes a network from the list of configured networks.
+	 *	@param	callbackContext		A Cordova callback context
+	 *	@param	data				JSON Array, with [0] being SSID to removeNetwork
+	 *	@return	true if network removed, false if failed
+	 */
+	private boolean removeNetwork(CallbackContext callbackContext, JSONArray data) {
+		if (data == null || data[0] == null) {
+			callbackContext.error("Data is null.");
+			return false;
+		}
+		
+		String ssidToDisconnect = data[0];
+		
+		List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
+		int numberOfNetworks = currentNetworks.size();
+		int networkIdToRemove = -1;
+		WifiConfiguration test;
+		
+		// For each network in the list, compare the SSID with the given one
+		for (int i = 0; i < numberOfNetworks; i++) {
+			test = currentNetworks.get(i);
+			if (test.SSID.equals(ssidToDisconnect)) {
+				networkIdToRemove = test.networkId;
+			}
+		}
+		
+		if (networkIdToRemove > 0) {
+			wifiManager.removeNetwork(networkIdToRemove);
+			wifiManager.saveConfiguration();
+			callbackContext.success("Network removed.");
+			return true;
+		}
+		else {
+			callbackContext.error("Network not found.");
+			return false;
+		}
+	}
+	
+	
 }
