@@ -126,10 +126,7 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network removed, false if failed
 	 */
 	private boolean removeNetwork(CallbackContext callbackContext, JSONArray data) {
-		if (data == null || data.get(0) == null) {
-			callbackContext.error("Data is null.");
-			return false;
-		}
+		validateData(data);
 		
 		// TODO: Verify the type of data!
 		String ssidToDisconnect = data.get(0);
@@ -158,10 +155,7 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network connected, false if failed
 	 */
 	private boolean connectNetwork(CallbackContext callbackContext, JSONArray data) {
-		if (data == null || data.get(0) == null) {
-			callbackContext.error("Data is null.");
-			return false;
-		}
+		validateData(data);
 		
 		// TODO: Verify type of data here!
 		String ssidToConnect = data.get(0);
@@ -222,5 +216,13 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		
 		return networkId;
+	}
+	
+	private boolean validateData(JSONArray data) {
+		if (data == null || data.get(0) == null) {
+			callbackContext.error("Data is null.");
+			return false;
+		}
+		return true;
 	}
 }
