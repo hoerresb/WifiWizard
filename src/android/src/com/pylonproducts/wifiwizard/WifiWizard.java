@@ -58,11 +58,11 @@ public class WifiWizard extends CordovaPlugin {
 		}
 
 		else if (action.equals(DISCONNECT_NETOWRK)) {
-			return this.connectNetwork(callbackContext, data);
+			return this.disconnectNetwork(callbackContext, data);
 		}
 		
 		else if (action.equals(LIST_NETWORKS)) {
-			return this.connectNetwork(callbackContext, data);
+			return this.listNetworks(callbackContext, data);
 		}
 		
 		return false;	
@@ -95,6 +95,8 @@ public class WifiWizard extends CordovaPlugin {
 		// TODO: Add more authentications as necessary
 		else {
 			log.d(TAG, "Wifi Authentication Type Not Supported.");
+			callbackContext.error("Wifi Authentication Type Not Supported: " + authType);
+			return false;
 		}
 		
 		// Currently, just assuming WPA, as that is the only one that is supported.
@@ -115,8 +117,9 @@ public class WifiWizard extends CordovaPlugin {
 	
 	/**
 	 *	This method removes a network from the list of configured networks.
+	 * 
 	 *	@param	callbackContext		A Cordova callback context
-	 *	@param	data				JSON Array, with [0] being SSID to removeNetwork
+	 *	@param	data				JSON Array, with [0] being SSID to remove
 	 *	@return	true if network removed, false if failed
 	 */
 	private boolean removeNetwork(CallbackContext callbackContext, JSONArray data) {
@@ -152,5 +155,37 @@ public class WifiWizard extends CordovaPlugin {
 		}
 	}
 	
+	/**
+	 *	This method connects a network.
+	 *
+	 *	@param	callbackContext		A Cordova callback context
+	 *	@param	data				JSON Array, with [0] being SSID to connect
+	 *	@return	true if network connected, false if failed
+	 */
+	private boolean connectNetwork(CallbackContext callbackContext, JSONArray data) {
 	
+	}
+	
+	/**
+	 *	This method disconnects a network.
+	 *
+	 *	@param	callbackContext		A Cordova callback context
+	 *	@param	data				JSON Array, with [0] being SSID to connect
+	 *	@return	true if network disconnected, false if failed
+	 */
+	private boolean disconnectNetwork(CallbackContext callbackContext, JSONArray data) {
+	
+	}
+	
+	/**
+	 *	This method uses the callbackContext.success method to send a JSONArray
+	 *	of the currently configured networks.
+	 *
+	 *	@param	callbackContext		A Cordova callback context
+	 *	@param	data				JSON Array, with [0] being SSID to connect
+	 *	@return	true if network disconnected, false if failed
+	 */
+	private boolean listNetworks(CallbackContext callbackContext, JSONArray data) {
+	
+	}
 }
