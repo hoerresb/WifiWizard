@@ -126,13 +126,13 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network removed, false if failed
 	 */
 	private boolean removeNetwork(CallbackContext callbackContext, JSONArray data) {
-		validateData(data);
+		if(!validateData(data)) {
+			return false;
+		}
 		
 		// TODO: Verify the type of data!
 		String ssidToDisconnect = data.get(0);
-		
 
-		
 		int networkIdToRemove = ssidToNetworkId(ssidToDisconnect);
 		
 		if (networkIdToRemove > 0) {
@@ -155,7 +155,9 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network connected, false if failed
 	 */
 	private boolean connectNetwork(CallbackContext callbackContext, JSONArray data) {
-		validateData(data);
+		if(!validateData(data)) {
+			return false;
+		}
 		
 		// TODO: Verify type of data here!
 		String ssidToConnect = data.get(0);
@@ -181,7 +183,24 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network disconnected, false if failed
 	 */
 	private boolean disconnectNetwork(CallbackContext callbackContext, JSONArray data) {
-	
+		if(!validateData(data)) {
+			return false;
+		}
+		
+		// TODO: Verify type of data here!
+		String ssidToDisconnect = data.get(0);
+		
+		int networkIdToDisconnect = ssidToNetworkId(ssidToDisconnect);
+		
+		if (networkIdToDisconnect > 0) {
+			wifiManager.disableNetwork(networkIdToDisconnect);
+			callbackContext.success("Network " + ssidToConnect + " disconnected!");
+			return true;
+		}
+		else {
+			callbackContext.error("Network " + ssidToConnect + " not found!");
+			return false;
+		}
 	}
 	
 	/**
@@ -192,8 +211,14 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@param	data				JSON Array, with [0] being SSID to connect
 	 *	@return	true if network disconnected, false if failed
 	 */
-	private boolean listNetworks(CallbackContext callbackContext, JSONArray data) {
-	
+	private boolean listNetworks(CallbackContext callbackContext) {
+		List<WifiConfiguration> wifiList = wifiManager.getConfiguredNetworks();
+		JSONObject returnList = new JSONObject();
+		
+		//TODO: Convert wifiList to returnList
+		
+		callbackContext.success(returnList);
+		return true;
 	}
 	
 	/**
