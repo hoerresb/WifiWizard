@@ -14,9 +14,9 @@ var WifiWizard = {
 	 */
 	formatWifiConfig: function(SSID, password, algorithm) {
 		var wifiConfig = {
-			"SSID":SSID,
-			"Password":password,
-			"AuthAlg":algorithm
+			'SSID':SSID,
+			'Password':password,
+			'AuthAlg':algorithm
 		};
 		return wifiConfig;
 	},
@@ -28,9 +28,9 @@ var WifiWizard = {
 	 * @param 	wifi is JSON formatted information necessary for adding the Wifi
 	 * 			network. Ex:
 	 *				wifi = { 
-	 * 					"SSID": "\"MyNetwork\"",
-	 *					"Password": "\"suchsecretpasswordwow\"",
-	 *					"AuthAlg": "WPA"
+	 * 					'SSID': '\'MyNetwork\'',
+	 *					'Password': '\'suchsecretpasswordwow\'',
+	 *					'AuthAlg': 'WPA'
 	 *				}
 	 * @param 	win is a callback function that gets called if the plugin is 
 	 * 			successful.
@@ -44,61 +44,61 @@ var WifiWizard = {
 			// Ok to proceed!
 		}
 		else {
-			console.log("WifiWizard: Invalid parameter. wifi not an object.");
+			console.log('WifiWizard: Invalid parameter. wifi not an object.');
 		}
 		
 		networkInformation = [];
 		
-		if (wifi["SSID"] !== undefined) {
-			networkInformation.push(wifi["SSID"]);
+		if (wifi['SSID'] !== undefined) {
+			networkInformation.push(wifi['SSID']);
 		}
 		else {
 			// i dunno, like, reject the call or something? what are you even doing?
-			console.log("WifiWizard: No SSID given.");
+			console.log('WifiWizard: No SSID given.');
 			return false;
 		}
 		
-		if (wifi["password"] !=== undefined) {
-			networkInformation.push(wifi["password"]);
+		if (wifi['password'] !=== undefined) {
+			networkInformation.push(wifi['password']);
 		}
 		else {
 			// Assume no password for open networks.
-			networkInformation.push("");
-			console.log("WifiWizard: No password given.");
+			networkInformation.push('');
+			console.log('WifiWizard: No password given.');
 		}
 		
-		if (wifi["AuthAlg"] !=== undefined) {
-			networkInformation.push(wifi["AuthAlg"]);
+		if (wifi['AuthAlg'] !=== undefined) {
+			networkInformation.push(wifi['AuthAlg']);
 		}
 		else {
-			console.log("WifiWizard: No authentication algorithm given.");
+			console.log('WifiWizard: No authentication algorithm given.');
 			return false;
 		}
 		
-		cordova.exec(win, fail, "WifiWizard", "addNetwork", networkInformation);
+		cordova.exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);
 		return this;	
 	},
 	
 	// Remove network
 	removeNetwork: function(SSID, win, fail) {
-		cordova.exec(win, fail, "WifiWizard", "removeNetwork", [SSID]);
+		cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [SSID]);
 		return this;
 	},
 
 	// Connect to Network
 	connectNetwork: function(SSID, win, fail) {
-		cordova.exec(win, fail, "WifiWizard", "connectNetwork", [SSID]);
+		cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [SSID]);
 		return this;
 	},
 	
 	// Disconnect from network
 	disconnectNetwork: function(SSID, win, fail) {
-		cordova.exec(win, fail, "WifiWizard", "disconnectNetwork", [SSID]);
+		cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [SSID]);
 		return this;
 	},
 	
 	// List networks
 	listNetworks: function(win, fail) {
-		return cordova.exec(win, fail, "WifiWizard", "listNetworks", []);
+		return cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
 	}	
 };
