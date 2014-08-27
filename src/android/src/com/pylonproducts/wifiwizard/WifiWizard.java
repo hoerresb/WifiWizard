@@ -162,7 +162,7 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		
 		// TODO: Verify type of data here!
-		String ssidToConnect = data.geString(0);
+		String ssidToConnect = data.getString(0);
 		
 		int networkIdToConnect = ssidToNetworkId(ssidToConnect);
 		
