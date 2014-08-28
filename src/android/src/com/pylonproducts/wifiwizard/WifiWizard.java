@@ -215,9 +215,13 @@ public class WifiWizard extends CordovaPlugin {
 	 */
 	private boolean listNetworks(CallbackContext callbackContext) {
 		List<WifiConfiguration> wifiList = wifiManager.getConfiguredNetworks();
-		JSONObject returnList = new JSONObject();
+		JSONArray returnList = new JSONArray();
 		
 		//TODO: Convert wifiList to returnList
+		for (WifiConfiguration wifi in wifiList) {
+			//TODO: grab relevant information (SSID?) and stash in returnList
+			returnList.put(wifi.SSID);
+		}
 		
 		callbackContext.success(returnList);
 		return true;
