@@ -97,7 +97,7 @@ var WifiWizard = {
 		return this;
 	},
 	
-	// List networks
+	// List networks. Callback function win 
 	listNetworks: function(win, fail) {
 		return cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
 	}	
