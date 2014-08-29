@@ -15,7 +15,7 @@
 	<asset src="www/WifiWizard.js" target="WifiWizard.js" />
 	
     <js-module src="www/WifiWizard.js" name="WifiWizard">
-        <clobbers target="wifi" />
+        <clobbers target="WifiWizard" />
     </js-module>
 
     <platform name="android">
