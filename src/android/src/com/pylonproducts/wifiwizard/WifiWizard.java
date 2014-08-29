@@ -138,19 +138,24 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		
 		// TODO: Verify the type of data!
-		String ssidToDisconnect = data.getString(0);
+		try {
+			String ssidToDisconnect = data.getString(0);
 
-		int networkIdToRemove = ssidToNetworkId(ssidToDisconnect);
-		
-		if (networkIdToRemove > 0) {
-			wifiManager.removeNetwork(networkIdToRemove);
-			wifiManager.saveConfiguration();
-			callbackContext.success("Network removed.");
-			return true;
+			int networkIdToRemove = ssidToNetworkId(ssidToDisconnect);
+			
+			if (networkIdToRemove > 0) {
+				wifiManager.removeNetwork(networkIdToRemove);
+				wifiManager.saveConfiguration();
+				callbackContext.success("Network removed.");
+				return true;
+			}
+			else {
+				callbackContext.error("Network not found.");
+				return false;
+			}
 		}
-		else {
-			callbackContext.error("Network not found.");
-			return false;
+		catch (Exception e) {
+			callbackContext.error(e.getMessage());
 		}
 	}
 	
@@ -165,7 +170,7 @@ public class WifiWizard extends CordovaPlugin {
 		if(!validateData(data)) {
 			return false;
 		}
-		String ssidToConnect;
+		String ssidToConnect = "";
 		// TODO: Verify type of data here!
 		try {
 			ssidToConnect = data.getString(0);
@@ -248,7 +253,7 @@ public class WifiWizard extends CordovaPlugin {
 	private int ssidToNetworkId(String ssid) {
 		List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
 		int numberOfNetworks = currentNetworks.size();
-		int networkId;
+		int networkId = -1;
 		WifiConfiguration test;
 		
 		// For each network in the list, compare the SSID with the given one
@@ -273,5 +278,5 @@ public class WifiWizard extends CordovaPlugin {
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
 		}
-	}
+		return false;
 }
