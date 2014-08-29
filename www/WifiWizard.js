@@ -2,13 +2,16 @@
  * This is the interface for the WifiWizard Phonegap plugin.
  */
   
-var WifiWizard = {
+ var exec = require('cordova/exec');
+var platform = require('cordova/platform');
+  
+module.exports = {
 
 	/**
 	 * 	This method formats wifi information into an object for use with the
 	 * 	addNetwork function.
-	 *	@param SSID			the SSID of the network enclosed in double quotes
-	 *	@param password		the password for the network enclosed in double quotes
+	 *		@param SSID			the SSID of the network enclosed in double quotes
+	 *		@param password		the password for the network enclosed in double quotes
 	 * 	@param algorithm	the authentication algorithm
 	 * 	@return	wifiConfig	a JSON object properly formatted for the plugin.
 	 */
@@ -75,30 +78,30 @@ var WifiWizard = {
 			return false;
 		}
 		
-		cordova.exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);
+		exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);
 		return this;	
 	},
 	
 	// Remove network
 	removeNetwork: function(SSID, win, fail) {
-		cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [SSID]);
+		exec(win, fail, 'WifiWizard', 'removeNetwork', [SSID]);
 		return this;
 	},
 
 	// Connect to Network
 	connectNetwork: function(SSID, win, fail) {
-		cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [SSID]);
+		exec(win, fail, 'WifiWizard', 'connectNetwork', [SSID]);
 		return this;
 	},
 	
 	// Disconnect from network
 	disconnectNetwork: function(SSID, win, fail) {
-		cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [SSID]);
+		exec(win, fail, 'WifiWizard', 'disconnectNetwork', [SSID]);
 		return this;
 	},
 	
 	// List networks. Callback function win 
 	listNetworks: function(win, fail) {
-		return cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
+		return exec(win, fail, 'WifiWizard', 'listNetworks', []);
 	}	
 };
