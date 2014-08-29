@@ -157,6 +157,7 @@ public class WifiWizard extends CordovaPlugin {
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
 		}
+		return false;
 	}
 	
 	/**
@@ -202,7 +203,7 @@ public class WifiWizard extends CordovaPlugin {
 		if(!validateData(data)) {
 			return false;
 		}
-		String ssidToDisconnect;
+		String ssidToDisconnect = "";
 		// TODO: Verify type of data here!
 		try {
 			ssidToDisconnect = data.getString(0);
