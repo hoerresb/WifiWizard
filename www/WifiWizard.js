@@ -5,7 +5,7 @@
 var exec = require('cordova/exec');
 var platform = require('cordova/platform');
   
-module.exports.WifiWizard= {
+var WifiWizard = {
 
 	/**
 	 * 	This method formats wifi information into an object for use with the
@@ -105,3 +105,15 @@ module.exports.WifiWizard= {
 		return exec(win, fail, 'WifiWizard', 'listNetworks', []);
 	}	
 };
+
+if (!window.plugins) {
+	window.plugins = {};
+}
+
+if (!window.plugins.wifiWizard) {
+	window.plugins.wifiWizard = WifiWizard;
+}
+
+if (module.exports) {
+	module.exports = WifiWizard;
+}

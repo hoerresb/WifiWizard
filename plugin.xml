@@ -19,7 +19,7 @@
 	<asset src="www/WifiWizard.js" target="WifiWizard.js" />
 	
     <js-module src="www/WifiWizard.js" name="WifiWizard">
-        <clobbers target="WifiWizard" />
+        <clobbers target="cordova.plugins.wifiWizard" />
     </js-module>
 
     <platform name="android">
