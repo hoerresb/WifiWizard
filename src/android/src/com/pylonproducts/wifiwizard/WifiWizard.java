@@ -263,14 +263,15 @@ public class WifiWizard extends CordovaPlugin {
 	}
 	
 	private boolean validateData(JSONArray data) {
-	try {
-		if (data == null || data.get(0) == null) {
+		try {
+			if (data == null || data.get(0) == null) {
 				callbackContext.error("Data is null.");
 				return false;
 			}
 			return true;
 		}
-	catch (Exception e) {
-		callbackContext.error(e.getMessage());
+		catch (Exception e) {
+			callbackContext.error(e.getMessage());
+		}
 	}
 }
