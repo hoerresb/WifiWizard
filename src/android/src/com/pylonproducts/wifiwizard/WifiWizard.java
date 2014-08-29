@@ -83,38 +83,43 @@ public class WifiWizard extends CordovaPlugin {
 	private boolean addNetwork(CallbackContext callbackContext, JSONArray data) {
 		// Initialize the WifiConfiguration object
 		WifiConfiguration wifi = new WifiConfiguration();
-		String authType = data.getString(2);
-		
-		// TODO: Check if network exists, if so, then do an update instead.
-		
-		if (authType.equals("WPA")) {
-			// TODO: connect/configure for WPA
-		}
-		else if (authType.equals("WEP")) {
-			// TODO: connect/configure for WEP
-			// or not? screw wep
+		try {
+			String authType = data.getString(2);
 			
-			callbackContext.error("WEP unsupported");
-			return false;
+			
+			// TODO: Check if network exists, if so, then do an update instead.
+			
+			if (authType.equals("WPA")) {
+				// TODO: connect/configure for WPA
+			}
+			else if (authType.equals("WEP")) {
+				// TODO: connect/configure for WEP
+				// or not? screw wep
+				
+				callbackContext.error("WEP unsupported");
+				return false;
+			}
+			// TODO: Add more authentications as necessary
+			else {
+				// log.d(TAG, "Wifi Authentication Type Not Supported.");
+				callbackContext.error("Wifi Authentication Type Not Supported: " + authType);
+				return false;
+			}
+			
+			// Currently, just assuming WPA, as that is the only one that is supported.
+			wifi.SSID = data.getString(0);
+			wifi.preSharedKey = data.getString(1);
+			wifi.status = WifiConfiguration.Status.ENABLED;        
+			wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+			wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+			wifi.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+			wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+			wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+			wifi.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
 		}
-		// TODO: Add more authentications as necessary
-		else {
-			// log.d(TAG, "Wifi Authentication Type Not Supported.");
-			callbackContext.error("Wifi Authentication Type Not Supported: " + authType);
-			return false;
+		catch (Exception e) {
+			callbackContext.error(e.getMessage());
 		}
-		
-		// Currently, just assuming WPA, as that is the only one that is supported.
-		wifi.SSID = data.getString(0);
-		wifi.preSharedKey = data.getString(1);
-		wifi.status = WifiConfiguration.Status.ENABLED;        
-		wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-		wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-		wifi.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-		wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-		wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-		wifi.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-	
 		wifiManager.addNetwork(wifi);
 		wifiManager.saveConfiguration();
 		return true;
@@ -162,8 +167,12 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		
 		// TODO: Verify type of data here!
-		String ssidToConnect = data.getString(0);
-		
+		try {
+			String ssidToConnect = data.getString(0);
+		}
+		catch (Exception e) {
+			callbackContext.error(e.getMessage());
+		}
 		int networkIdToConnect = ssidToNetworkId(ssidToConnect);
 		
 		if (networkIdToConnect > 0) {
@@ -190,8 +199,12 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		
 		// TODO: Verify type of data here!
-		String ssidToDisconnect = data.getString(0);
-		
+		try {
+			String ssidToDisconnect = data.getString(0);
+		}
+		catch (Exception e) {
+			callbackContext.error(e.getMessage());
+		}
 		int networkIdToDisconnect = ssidToNetworkId(ssidToDisconnect);
 		
 		if (networkIdToDisconnect > 0) {
@@ -250,10 +263,14 @@ public class WifiWizard extends CordovaPlugin {
 	}
 	
 	private boolean validateData(JSONArray data) {
+	try {
 		if (data == null || data.get(0) == null) {
-			callbackContext.error("Data is null.");
-			return false;
+				callbackContext.error("Data is null.");
+				return false;
+			}
+			return true;
 		}
-		return true;
+	catch (Exception e) {
+		callbackContext.error(e.getMessage());
 	}
 }
