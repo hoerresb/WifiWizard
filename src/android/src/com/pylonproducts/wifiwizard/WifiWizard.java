@@ -218,7 +218,7 @@ public class WifiWizard extends CordovaPlugin {
 		JSONArray returnList = new JSONArray();
 		
 		//TODO: Convert wifiList to returnList
-		for (WifiConfiguration wifi in wifiList) {
+		for (WifiConfiguration wifi : wifiList) {
 			//TODO: grab relevant information (SSID?) and stash in returnList
 			returnList.put(wifi.SSID);
 		}
