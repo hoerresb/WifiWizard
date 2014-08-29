@@ -165,10 +165,10 @@ public class WifiWizard extends CordovaPlugin {
 		if(!validateData(data)) {
 			return false;
 		}
-		
+		String ssidToConnect;
 		// TODO: Verify type of data here!
 		try {
-			String ssidToConnect = data.getString(0);
+			ssidToConnect = data.getString(0);
 		}
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
