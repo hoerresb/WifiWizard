@@ -29,9 +29,11 @@
 			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 			<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 		</config-file>
-		<config-file target="res/xml/config.xml" parent="/*">	
+		
+		<config-file target="config.xml" parent="/*">	
 			<feature name="WifiWizard">
 				<param name="android-package" value="com.pylonproducts.wifiwizard.WifiWizard" />
+				<param name="onload" value="true" />
 			</feature>
 		</config-file>
     </platform>
