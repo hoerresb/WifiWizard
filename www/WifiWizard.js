@@ -1,7 +1,7 @@
 /*
  * This is the interface for the WifiWizard Phonegap plugin.
  */
-  
+ 
 var exec = require('cordova/exec');
 var platform = require('cordova/platform');
   
@@ -106,14 +106,4 @@ var WifiWizard = {
 	}	
 };
 
-if (!window.plugins) {
-	window.plugins = {};
-}
-
-if (!window.plugins.wifiWizard) {
-	window.plugins.wifiWizard = WifiWizard;
-}
-
-if (module.exports) {
-	module.exports = WifiWizard;
-}
+module.exports = WifiWizard;
