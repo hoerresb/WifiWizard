@@ -12,10 +12,6 @@
     <license>Apache 2.0 License</license>
 	<repo>https://github.com/parsonsmatt/WifiWizard/</repo>
 
-	<engines>
-		<engine name="cordova" version="3.5.0" />
-	</engines>
-	
 	<asset src="www/WifiWizard.js" target="WifiWizard.js" />
 	
     <js-module src="www/WifiWizard.js" name="WifiWizard">
@@ -23,8 +19,7 @@
     </js-module>
 
     <platform name="android">
-		<source-file src="src/android/src/com/pylonproducts/wifiwizard/WifiWizard.java" 
-					 target-dir="src/com/pylonproducts/wifiwizard" />
+		<source-file src="src/android/src/com/pylonproducts/wifiwizard/WifiWizard.java" target-dir="src/com/pylonproducts/wifiwizard" />
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 			<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
