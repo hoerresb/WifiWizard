@@ -19,18 +19,20 @@
     </js-module>
 
     <platform name="android">
-		<source-file src="src/android/src/com/pylonproducts/wifiwizard/WifiWizard.java" target-dir="src/com/pylonproducts/wifiwizard" />
+		
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 			<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 		</config-file>
 		
-		<config-file target="config.xml" parent="/*">	
+		<config-file target="res/xml/config.xml" parent="/*">	
 			<feature name="WifiWizard">
 				<param name="android-package" value="com.pylonproducts.wifiwizard.WifiWizard" />
 				<param name="onload" value="true" />
 			</feature>
 		</config-file>
+		
+	<source-file src="src/android/src/com/pylonproducts/wifiwizard/WifiWizard.java" target-dir="src/com/pylonproducts/wifiwizard" />	
     </platform>
     
 </plugin>
