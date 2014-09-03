@@ -97,9 +97,18 @@ var WifiWizard = {
 		
 	},
 	
-	// List networks. Callback function win 
+	/**
+	 *	Hands the list of available networks to the `win` success callback function.
+	 * @param 	win	callback function that receives list of networks
+	 * @param 	fail	callback function if error
+	 * @return		a list of networks
+	 */
 	listNetworks: function(win, fail) {
-		return cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
+		if (typeof win != "function") {
+			console.log("listNetworks first parameter must be a function to handle list.");
+			return;
+		}
+		cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
 	}	
 };
 
