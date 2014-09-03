@@ -76,25 +76,25 @@ var WifiWizard = {
 		}
 		
 		cordova.exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);
-		return this;	
+			
 	},
 	
 	// Remove network
 	removeNetwork: function(SSID, win, fail) {
 		cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [SSID]);
-		return this;
+		
 	},
 
 	// Connect to Network
 	connectNetwork: function(SSID, win, fail) {
 		cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [SSID]);
-		return this;
+		
 	},
 	
 	// Disconnect from network
 	disconnectNetwork: function(SSID, win, fail) {
 		cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [SSID]);
-		return this;
+		
 	},
 	
 	// List networks. Callback function win 
