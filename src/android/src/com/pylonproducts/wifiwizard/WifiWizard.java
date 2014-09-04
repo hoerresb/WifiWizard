@@ -127,7 +127,6 @@ public class WifiWizard extends CordovaPlugin {
 			Log.d(TAG,e.getMessage());
 			return false;
 		}
-		return false;
 	}
 	
 	/**
@@ -169,7 +168,6 @@ public class WifiWizard extends CordovaPlugin {
 			Log.d(TAG, e.getMessage());
 			return false;
 		}
-		return false;
 	}
 	
 	/**
