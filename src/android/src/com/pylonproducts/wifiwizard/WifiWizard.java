@@ -125,7 +125,7 @@ public class WifiWizard extends CordovaPlugin {
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
 			Log.d(TAG,e.getMessage());
-			return false
+			return false;
 		}
 		return false;
 	}
