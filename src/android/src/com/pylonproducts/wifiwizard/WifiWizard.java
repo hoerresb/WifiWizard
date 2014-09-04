@@ -287,8 +287,10 @@ public class WifiWizard extends CordovaPlugin {
 		// For each network in the list, compare the SSID with the given one
 		for (WifiConfiguration test : currentNetworks) {
 			Log.d(TAG, "Looking for: " + ssid + ", found: " + test.SSID);
-			if (test.SSID.equals(ssid)) {
+			Log.d(TAG, "Is it a match? " + (ssid.equals(test.SSID)));
+			if ( test.SSID.equals(ssid) ) {
 				networkId = test.networkId;
+				Log.d(TAG, "NetworkID is now: " + networkId);
 			}
 		}
 		
