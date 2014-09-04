@@ -182,7 +182,7 @@ public class WifiWizard extends CordovaPlugin {
 	private boolean connectNetwork(CallbackContext callbackContext, JSONArray data) {
 		Log.d(TAG, "WifiWizard: connectNetwork entered.");
 		if(!validateData(data)) {
-			calbackContext.error("WifiWizard: connectNetwork invalid data");
+			callbackContext.error("WifiWizard: connectNetwork invalid data");
 			Log.d(TAG, "WifiWizard: connectNetwork invalid data.");
 			return false;
 		}
@@ -221,7 +221,7 @@ public class WifiWizard extends CordovaPlugin {
 	private boolean disconnectNetwork(CallbackContext callbackContext, JSONArray data) {
 	Log.d(TAG, "WifiWizard: disconnectNetwork entered.");
 		if(!validateData(data)) {
-			calbackContext.error("WifiWizard: disconnectNetwork invalid data");
+			callbackContext.error("WifiWizard: disconnectNetwork invalid data");
 			Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
 			return false;
 		}
