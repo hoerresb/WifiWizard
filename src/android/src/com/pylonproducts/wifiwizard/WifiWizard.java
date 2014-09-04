@@ -109,8 +109,13 @@ public class WifiWizard extends CordovaPlugin {
 			}
 			
 			// Currently, just assuming WPA, as that is the only one that is supported.
-			wifi.SSID = data.getString(0);
-			wifi.preSharedKey = data.getString(1);
+			String newSSID = data.getString(0);
+			wifi.SSID = newSSID;
+			String newPass = data.getString(1);
+			wifi.preSharedKey = newPass;
+			
+			Log.d(TAG, "SSID: " + newSSID + ", Pass: " + newPass);
+			
 			wifi.status = WifiConfiguration.Status.ENABLED;        
 			wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
 			wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
@@ -277,13 +282,11 @@ public class WifiWizard extends CordovaPlugin {
 	 */
 	private int ssidToNetworkId(String ssid) {
 		List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
-		int numberOfNetworks = currentNetworks.size();
 		int networkId = -1;
-		WifiConfiguration test;
 		
 		// For each network in the list, compare the SSID with the given one
-		for (int i = 0; i < numberOfNetworks; i++) {
-			test = currentNetworks.get(i);
+		for (WifiConfiguration test : currentNetworks) {
+			Log.d(TAG, "Looking for: " + ssid + ", found: " + test.SSID);
 			if (test.SSID.equals(ssid)) {
 				networkId = test.networkId;
 			}
