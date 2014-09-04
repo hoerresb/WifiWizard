@@ -13,6 +13,7 @@ var WifiWizard = {
 	 * 	@return	wifiConfig	a JSON object properly formatted for the plugin.
 	 */
 	formatWifiConfig: function(SSID, password, algorithm) {
+		console.log("WifiWizard configuration method entered.");
 		var wifiConfig = {
 			'SSID':SSID,
 			'Password':password,
@@ -39,7 +40,7 @@ var WifiWizard = {
 	 * @return 	`this` so you can chain calls together.
 	 */
 	addNetwork: function(wifi, win, fail) {
-		
+		console.log("WifiWizard add method entered.");
 		if (wifi !== null && typeof wifi === 'object') {
 			// Ok to proceed!
 		}
@@ -49,7 +50,7 @@ var WifiWizard = {
 		
 		var networkInformation = [];
 		
-		if (wifi.SSID !== undefined) {
+		if (wifi.SSID !== undefined && wifi.SSID !== '') {
 			networkInformation.push(wifi.SSID);
 		}
 		else {
@@ -58,7 +59,7 @@ var WifiWizard = {
 			return false;
 		}
 		
-		if (wifi.password !== undefined) {
+		if (wifi.Password !== undefined) {
 			networkInformation.push(wifi.password);
 		}
 		else {
@@ -67,7 +68,7 @@ var WifiWizard = {
 			console.log('WifiWizard: No password given.');
 		}
 		
-		if (wifi.AuthAlg !== undefined) {
+		if (wifi.AuthAlg !== undefined && wifi.AuthAlg !== '') {
 			networkInformation.push(wifi.AuthAlg);
 		}
 		else {
@@ -81,18 +82,20 @@ var WifiWizard = {
 	
 	// Remove network
 	removeNetwork: function(SSID, win, fail) {
+		console.log("WifiWizard remove method entered.");
 		cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [SSID]);
 		
 	},
 
 	// Connect to Network
 	connectNetwork: function(SSID, win, fail) {
+		console.log("WifiWizard connect method entered.");
 		cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [SSID]);
-		
 	},
 	
 	// Disconnect from network
 	disconnectNetwork: function(SSID, win, fail) {
+		console.log("WifiWizard disconnect method entered.");
 		cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [SSID]);
 		
 	},
@@ -104,6 +107,7 @@ var WifiWizard = {
 	 * @return		a list of networks
 	 */
 	listNetworks: function(win, fail) {
+		console.log("WifiWizard list method entered.");
 		if (typeof win != "function") {
 			console.log("listNetworks first parameter must be a function to handle list.");
 			return;
