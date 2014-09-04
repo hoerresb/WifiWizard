@@ -11,7 +11,7 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiEnterpriseConfig;
 import android.content.Context;
-// import android.util.log;
+import android.util.Log;
 
 
 public class WifiWizard extends CordovaPlugin {
@@ -30,7 +30,6 @@ public class WifiWizard extends CordovaPlugin {
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 		super.initialize(cordova, webView);
-		// initialize wifimanager
 		this.wifiManager = (WifiManager) cordova.getActivity().getSystemService(Context.WIFI_SERVICE);
 	}
 	
@@ -40,7 +39,6 @@ public class WifiWizard extends CordovaPlugin {
 		
 		this.callbackContext = callbackContext;
 		
-		// First make sure wifi is enabled
 		if (!wifiManager.isWifiEnabled()) {
 			callbackContext.error("Wifi is not enabled.");
 			return false;
@@ -67,6 +65,7 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		
 		callbackContext.error("Incorrect action parameter: " + action);
+		
 		return false;	
 	}
 	
@@ -83,6 +82,9 @@ public class WifiWizard extends CordovaPlugin {
 	private boolean addNetwork(CallbackContext callbackContext, JSONArray data) {
 		// Initialize the WifiConfiguration object
 		WifiConfiguration wifi = new WifiConfiguration();
+		
+		Log.d(TAG, "WifiWizard: addNetwork entered.");
+		
 		try {
 			String authType = data.getString(2);
 			
@@ -95,13 +97,13 @@ public class WifiWizard extends CordovaPlugin {
 			else if (authType.equals("WEP")) {
 				// TODO: connect/configure for WEP
 				// or not? screw wep
-				
+				Log.d(TAG, "WEP unsupported.");
 				callbackContext.error("WEP unsupported");
 				return false;
 			}
 			// TODO: Add more authentications as necessary
 			else {
-				// log.d(TAG, "Wifi Authentication Type Not Supported.");
+				Log.d(TAG, "Wifi Authentication Type Not Supported.");
 				callbackContext.error("Wifi Authentication Type Not Supported: " + authType);
 				return false;
 			}
@@ -116,13 +118,16 @@ public class WifiWizard extends CordovaPlugin {
 			wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
 			wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
 			wifi.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+			wifiManager.addNetwork(wifi);
+			wifiManager.saveConfiguration();
+			return true;
 		}
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
+			Log.d(TAG,e.getMessage());
+			return false
 		}
-		wifiManager.addNetwork(wifi);
-		wifiManager.saveConfiguration();
-		return true;
+		return false;
 	}
 	
 	/**
@@ -133,7 +138,11 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network removed, false if failed
 	 */
 	private boolean removeNetwork(CallbackContext callbackContext, JSONArray data) {
+		Log.d(TAG, "WifiWizard: removeNetwork entered.");
+		
 		if(!validateData(data)) {
+			callbackContext.error("WifiWizard: removeNetwork data invalid");
+			Log.d(TAG, "WifiWizard: removeNetwork data invalid");
 			return false;
 		}
 		
@@ -151,11 +160,14 @@ public class WifiWizard extends CordovaPlugin {
 			}
 			else {
 				callbackContext.error("Network not found.");
+				Log.d(TAG, "WifiWizard: Network not found, can't remove.");
 				return false;
 			}
 		}
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
+			Log.d(TAG, e.getMessage());
+			return false;
 		}
 		return false;
 	}
@@ -168,17 +180,23 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network connected, false if failed
 	 */
 	private boolean connectNetwork(CallbackContext callbackContext, JSONArray data) {
+		Log.d(TAG, "WifiWizard: connectNetwork entered.");
 		if(!validateData(data)) {
+			calbackContext.error("WifiWizard: connectNetwork invalid data");
+			Log.d(TAG, "WifiWizard: connectNetwork invalid data.");
 			return false;
 		}
 		String ssidToConnect = "";
-		// TODO: Verify type of data here!
+
 		try {
 			ssidToConnect = data.getString(0);
 		}
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
+			Log.d(TAG, e.getMessage());
+			return false;
 		}
+		
 		int networkIdToConnect = ssidToNetworkId(ssidToConnect);
 		
 		if (networkIdToConnect > 0) {
@@ -188,6 +206,7 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		else {
 			callbackContext.error("Network " + ssidToConnect + " not found!");
+			Log.d(TAG, "WifiWizard: Network not found to connect.");
 			return false;
 		}
 	}
@@ -200,7 +219,10 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network disconnected, false if failed
 	 */
 	private boolean disconnectNetwork(CallbackContext callbackContext, JSONArray data) {
+	Log.d(TAG, "WifiWizard: disconnectNetwork entered.");
 		if(!validateData(data)) {
+			calbackContext.error("WifiWizard: disconnectNetwork invalid data");
+			Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
 			return false;
 		}
 		String ssidToDisconnect = "";
@@ -210,7 +232,10 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
+			Log.d(TAG, e.getMessage());
+			return false;
 		}
+		
 		int networkIdToDisconnect = ssidToNetworkId(ssidToDisconnect);
 		
 		if (networkIdToDisconnect > 0) {
@@ -220,6 +245,7 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		else {
 			callbackContext.error("Network " + ssidToDisconnect + " not found!");
+			Log.d(TAG, "WifiWizard: Network not found to disconnect.");
 			return false;
 		}
 	}
@@ -233,12 +259,12 @@ public class WifiWizard extends CordovaPlugin {
 	 *	@return	true if network disconnected, false if failed
 	 */
 	private boolean listNetworks(CallbackContext callbackContext) {
+		Log.d(TAG, "WifiWizard: listNetworks entered.");
 		List<WifiConfiguration> wifiList = wifiManager.getConfiguredNetworks();
+		
 		JSONArray returnList = new JSONArray();
 		
-		//TODO: Convert wifiList to returnList
 		for (WifiConfiguration wifi : wifiList) {
-			//TODO: grab relevant information (SSID?) and stash in returnList
 			returnList.put(wifi.SSID);
 		}
 		
