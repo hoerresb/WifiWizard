@@ -14,8 +14,8 @@ var WifiWizard = {
 	 */
 	formatWifiConfig: function(SSID, password, algorithm) {
 		var wifiConfig = {
-			'SSID': WifiWizard.formatSSID(SSID),
-			'Password': WifiWizard.formatSSID(password),
+			'SSID': WifiWizard.formatWifiString(SSID),
+			'Password': WifiWizard.formatWifiString(password),
 			'AuthAlg': algorithm
 		};
 		return wifiConfig;
@@ -26,7 +26,7 @@ var WifiWizard = {
 	 *	If the SSID is not wrapped in double quotes, it wraps it in double quotes. 
 	 *	@param	ssid	the SSID to format
 	 */
-	formatSSID: function(ssid) {
+	formatWifiString: function(ssid) {
 		ssid = ssid.trim()
 		
 		if (ssid.charAt(0) != '"' ) {
@@ -101,20 +101,20 @@ var WifiWizard = {
 	// Remove network
 	removeNetwork: function(SSID, win, fail) {
 		//console.log("WifiWizard remove method entered.");
-		cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [SSID]);
+		cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [WifiWizard.formatWifiString(SSID)]);
 		
 	},
 
 	// Connect to Network
 	connectNetwork: function(SSID, win, fail) {
 		//console.log("WifiWizard connect method entered.");
-		cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [SSID]);
+		cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [WifiWizard.formatWifiString(SSID)]);
 	},
 	
 	// Disconnect from network
 	disconnectNetwork: function(SSID, win, fail) {
 		//console.log("WifiWizard disconnect method entered.");
-		cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [SSID]);
+		cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [WifiWizard.formatWifiString(SSID)]);
 		
 	},
 	
