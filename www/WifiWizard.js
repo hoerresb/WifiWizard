@@ -60,7 +60,7 @@ var WifiWizard = {
 		}
 		
 		if (wifi.Password !== undefined) {
-			networkInformation.push(wifi.password);
+			networkInformation.push(wifi.Password);
 		}
 		else {
 			// Assume no password for open networks.

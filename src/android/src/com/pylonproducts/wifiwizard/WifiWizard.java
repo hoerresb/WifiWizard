@@ -111,7 +111,7 @@ public class WifiWizard extends CordovaPlugin {
 			// Currently, just assuming WPA, as that is the only one that is supported.
 			String newSSID = data.getString(0);
 			wifi.SSID = newSSID;
-			String newPass = data.getString(1);
+			String newPass = data.getString(1); 	// Invalid PSK error happening here.
 			wifi.preSharedKey = newPass;
 			
 			Log.d(TAG, "SSID: " + newSSID + ", Pass: " + newPass);
@@ -156,7 +156,7 @@ public class WifiWizard extends CordovaPlugin {
 
 			int networkIdToRemove = ssidToNetworkId(ssidToDisconnect);
 			
-			if (networkIdToRemove > 0) {
+			if (networkIdToRemove >= 0) {
 				wifiManager.removeNetwork(networkIdToRemove);
 				wifiManager.saveConfiguration();
 				callbackContext.success("Network removed.");
