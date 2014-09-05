@@ -125,6 +125,7 @@ public class WifiWizard extends CordovaPlugin {
 			wifi.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
 			wifiManager.addNetwork(wifi);
 			wifiManager.saveConfiguration();
+			
 			return true;
 		}
 		catch (Exception e) {
