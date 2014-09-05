@@ -8,7 +8,7 @@ Only Android is in development at this time. iOS is planned to be developed, wit
 
 ### Installation
 
-Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git and add `<script src="WifiWizard.js"></script>` in your Phonegap project.
+Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git` and add `<script src="WifiWizard.js"></script>` in your Phonegap project.
 
 ### Usage from within Cordova/Phonegap:
 
