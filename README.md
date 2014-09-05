@@ -1,8 +1,8 @@
 # WifiWizard
 
-Version 0.0.3
+Version 0.1.0
 
-This Phonegap plugin enables WiFi management from within Phonegap. It is currently in development, but unusable at this time.
+This Phonegap plugin enables WiFi management from within Phonegap. 
 
 Only Android is in development at this time. iOS is planned to be developed, with other platforms following.
 
@@ -21,6 +21,7 @@ Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git and a
 
 ### Changelog:
 
+v0.1.0 - All methods are now working!
 v0.0.3 - Fixed errors in native implementation. Currently, Add and Remove networks aren't working, but others are working as expected.
 v0.0.2 - Changed plugin.xml and WifiWizard.js to attach WifiWizard directly to the HTML. 
 v0.0.1 - Initial commit

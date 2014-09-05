@@ -3,13 +3,13 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	id="com.pylonproducts.wifiwizard"
-	version="0.0.1">
+	version="0.1.0">
 
     <name>WifiWizard</name>
     <description>This plugin allows Phonegap applications to manage Wifi connections.</description>
 	<author>Matt Parsons</author>
 	<keywords>phonegap,network,wifi</keywords>
-    <license>Apache 2.0 License</license>
+    <license>Apache 2.0</license>
 	<repo>https://github.com/parsonsmatt/WifiWizard/</repo>
 
 	<asset src="www/WifiWizard.js" target="WifiWizard.js" />
