@@ -15,11 +15,30 @@ var WifiWizard = {
 	formatWifiConfig: function(SSID, password, algorithm) {
 		console.log("WifiWizard configuration method entered.");
 		var wifiConfig = {
-			'SSID':SSID,
+			'SSID':formatSSID(SSID),
 			'Password':password,
 			'AuthAlg':algorithm
 		};
 		return wifiConfig;
+	},
+	
+	/**
+	 *	This method formats a given SSID and ensures that it is appropriate.
+	 *	If the SSID is not wrapped in double quotes, it wraps it in double quotes. 
+	 *	@param	ssid	the SSID to format
+	 */
+	formatSSID: function(ssid) {
+		ssid = ssid.trim()
+		
+		if (ssid.charAt(0) != '"' ) {
+			ssid = '"' + ssid;
+		}
+		
+		if (ssid.charAt(ssid.length-1) != '"' ) {
+			ssid = ssid + '"';
+		}
+		
+		return ssid;
 	},
 	
 	/** 
