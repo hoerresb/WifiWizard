@@ -15,9 +15,9 @@ var WifiWizard = {
 	formatWifiConfig: function(SSID, password, algorithm) {
 		console.log("WifiWizard configuration method entered.");
 		var wifiConfig = {
-			'SSID':formatSSID(SSID),
-			'Password':password,
-			'AuthAlg':algorithm
+			'SSID': WifiWizard.formatSSID(SSID),
+			'Password': password,
+			'AuthAlg': algorithm
 		};
 		return wifiConfig;
 	},
