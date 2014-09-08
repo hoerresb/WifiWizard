@@ -24,9 +24,13 @@ var WifiWizard = {
 	/**
 	 *	This method formats a given SSID and ensures that it is appropriate.
 	 *	If the SSID is not wrapped in double quotes, it wraps it in double quotes. 
+	 * Despite the name, this also needs to be done to WPA PSK.
 	 *	@param	ssid	the SSID to format
 	 */
 	formatWifiString: function(ssid) {
+		if (ssid === undefined || ssid === null) {
+			ssid = "";
+		}
 		ssid = ssid.trim()
 		
 		if (ssid.charAt(0) != '"' ) {
@@ -98,22 +102,34 @@ var WifiWizard = {
 			
 	},
 	
-	// Remove network
+	/**
+	 *	This method removes a given network from the list of configured networks.
+	 *	@param	SSID	of the network to remove
+	 *	@param	win		function to handle successful callback
+	 *	@param	fail		function to handle error callback
+	 */
 	removeNetwork: function(SSID, win, fail) {
-		//console.log("WifiWizard remove method entered.");
 		cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [WifiWizard.formatWifiString(SSID)]);
 		
 	},
 
-	// Connect to Network
+	/** 
+	 *	This method connects a network if it is configured. 
+	 *	@param	SSID	the network to connect
+	 *	@param	win		function that is called if successful
+	 * @param	fail		function that is called to handle errors
+	 */
 	connectNetwork: function(SSID, win, fail) {
-		//console.log("WifiWizard connect method entered.");
 		cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [WifiWizard.formatWifiString(SSID)]);
 	},
 	
-	// Disconnect from network
+	/** 
+	 *	This method disconnects a network if it is configured. 
+	 *	@param	SSID	the network to disconnect
+	 *	@param	win		function that is called if successful
+	 * @param	fail		function that is called to handle errors
+	 */
 	disconnectNetwork: function(SSID, win, fail) {
-		//console.log("WifiWizard disconnect method entered.");
 		cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [WifiWizard.formatWifiString(SSID)]);
 		
 	},
@@ -125,7 +141,6 @@ var WifiWizard = {
 	 * @return		a list of networks
 	 */
 	listNetworks: function(win, fail) {
-	//	console.log("WifiWizard list method entered.");
 		if (typeof win != "function") {
 			console.log("listNetworks first parameter must be a function to handle list.");
 			return;
