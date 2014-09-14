@@ -69,8 +69,6 @@ public class WifiWizard extends CordovaPlugin {
 		return false;	
 	}
 	
-	// Them helper methods!
-	
 	/**
 	 * This methods adds a network to the list of available WiFi networks.
 	 * If the network already exists, then it updates it.
@@ -86,15 +84,19 @@ public class WifiWizard extends CordovaPlugin {
 		Log.d(TAG, "WifiWizard: addNetwork entered.");
 		
 		try {
-			String authType = data.getString(2);
+			// data's order for ANY object is 0: ssid, 1: authentication algorithm, 
+			// 2+: authentication information.
+			String authType = data.getString(1);
 			
-			
-			// TODO: Check if network exists, if so, then do an update instead.
-			
+						
 			if (authType.equals("WPA")) {
+				// WPA Data format:
+				// 0: ssid
+				// 1: auth
+				// 2: password
 				String newSSID = data.getString(0);
 				wifi.SSID = newSSID;
-				String newPass = data.getString(1); 	
+				String newPass = data.getString(2); 	
 				wifi.preSharedKey = newPass;
 				
 				wifi.status = WifiConfiguration.Status.ENABLED;        
@@ -104,6 +106,7 @@ public class WifiWizard extends CordovaPlugin {
 				wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
 				wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
 				wifi.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+				
 				wifi.networkId = ssidToNetworkId(newSSID);
 				
 				if ( wifi.networkId == -1 ) {

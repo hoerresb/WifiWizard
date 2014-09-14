@@ -13,14 +13,29 @@ var WifiWizard = {
 	 * 	@return	wifiConfig	a JSON object properly formatted for the plugin.
 	 */
 	formatWifiConfig: function(SSID, password, algorithm) {
-		var wifiConfig = {
-			'SSID': WifiWizard.formatWifiString(SSID),
-			'auth' : {
-				'algorithm' : algorithm,
-				'password' : WifiWizard.formatWifiString(password)
-				// Other parameters can be added depending on algorithm.
+		if (algorithm === 'WPA') {
+			var wifiConfig = {
+				'SSID': WifiWizard.formatWifiString(SSID),
+				'auth' : {
+					'algorithm' : algorithm,
+					'password' : WifiWizard.formatWifiString(password)
+					// Other parameters can be added depending on algorithm.
+				}
+			};
+		}
+		else if (algorithm === 'New network type') {
+			var wifiConfig = {
+				'SSID' : WifiWizard.formatWifiString(SSID),
+				'auth' : {
+					'algorithm' : algorithm,
+					// Etc...
+				}
 			}
-		};
+		}
+		else {
+			console.log("Algorithm incorrect")
+			return false;
+		}
 		return wifiConfig;
 	},
 	
