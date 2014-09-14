@@ -133,8 +133,6 @@ public class WifiWizard extends CordovaPlugin {
 				callbackContext.error("Wifi Authentication Type Not Supported: " + authType);
 				return false;
 			}
-			
-			return true;
 		}
 		catch (Exception e) {
 			callbackContext.error(e.getMessage());
