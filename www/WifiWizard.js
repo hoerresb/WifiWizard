@@ -6,7 +6,7 @@ var WifiWizard = {
 
 	/**
 	 * 	This method formats wifi information into an object for use with the
-	 * 	addNetwork function.
+	 * 	addNetwork function. Currently only supports 
 	 *		@param SSID			the SSID of the network enclosed in double quotes
 	 *		@param password		the password for the network enclosed in double quotes
 	 * 	@param algorithm	the authentication algorithm
@@ -18,9 +18,17 @@ var WifiWizard = {
 			'auth' : {
 				'algorithm' : algorithm,
 				'password' : WifiWizard.formatWifiString(password)
+				// Other parameters can be added depending on algorithm.
 			}
 		};
 		return wifiConfig;
+	},
+	
+	/**
+	 *	This method is a helper method that returns a wifi object with WPA.
+	 */
+	formatWPAConfig: function(SSID, password) {
+		return formatWifiConfig(SSID, password, 'WPA');
 	},
 	
 	/**
@@ -56,7 +64,6 @@ var WifiWizard = {
 	 * 			successful.
 	 * @param 	fail is a callback function that gets called if the plugin gets
 	 * 			an error
-	 * @return 	`this` so you can chain calls together.
 	 */
 	addNetwork: function(wifi, win, fail) {
 		//console.log("WifiWizard add method entered.");
@@ -78,25 +85,25 @@ var WifiWizard = {
 			return false;
 		}
 		
-		if (wifi.auth.password !== undefined) {
-			networkInformation.push(wifi.Password);
-		}
-		else {
-			// Assume no password for open networks.
-			networkInformation.push('');
-			console.log('WifiWizard: No password given.');
-		}
-		
-		if (wifi.AuthAlg !== undefined && wifi.AuthAlg !== '') {
-			networkInformation.push(wifi.AuthAlg);
+		if (typeof wifi.auth == 'object') {
+			
+			if (wifi.auth.algorithm === 'WPA') {
+				networkInformation.push(wifi.auth.algorithm);
+				networkInformation.push(wifi.auth.password);
+			}
+			else if (wifi.auth.algorithm === 'Newly supported type') {
+				// Push values in specific order, and implement new type in the Java code.
+			}
+			else {
+				console.log("WifiWizard: authentication invalid.");
+			}
 		}
 		else {
 			console.log('WifiWizard: No authentication algorithm given.');
 			return false;
 		}
 		
-		cordova.exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);
-			
+		cordova.exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);	
 	},
 	
 	/**
