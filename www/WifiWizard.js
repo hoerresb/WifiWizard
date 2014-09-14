@@ -15,8 +15,10 @@ var WifiWizard = {
 	formatWifiConfig: function(SSID, password, algorithm) {
 		var wifiConfig = {
 			'SSID': WifiWizard.formatWifiString(SSID),
-			'Password': WifiWizard.formatWifiString(password),
-			'AuthAlg': algorithm
+			'auth' : {
+				'algorithm' : algorithm,
+				'password' : WifiWizard.formatWifiString(password)
+			}
 		};
 		return wifiConfig;
 	},
@@ -49,12 +51,7 @@ var WifiWizard = {
 	 * Currently, only WPA authentication method is supported.
 	 * 
 	 * @param 	wifi is JSON formatted information necessary for adding the Wifi
-	 * 			network. Ex:
-	 *				wifi = { 
-	 * 					'SSID': '\'MyNetwork\'',
-	 *					'Password': '\'suchsecretpasswordwow\'',
-	 *					'AuthAlg': 'WPA'
-	 *				}
+	 * 			network, as is done in formatWifiConfig.
 	 * @param 	win is a callback function that gets called if the plugin is 
 	 * 			successful.
 	 * @param 	fail is a callback function that gets called if the plugin gets
@@ -81,7 +78,7 @@ var WifiWizard = {
 			return false;
 		}
 		
-		if (wifi.Password !== undefined) {
+		if (wifi.auth.password !== undefined) {
 			networkInformation.push(wifi.Password);
 		}
 		else {

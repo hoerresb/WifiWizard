@@ -107,7 +107,7 @@ public class WifiWizard extends CordovaPlugin {
 				wifi.networkId = ssidToNetworkId(newSSID);
 				
 				if ( wifi.networkId == -1 ) {
-					wifiManager.addetwork(wifi);
+					wifiManager.addNetwork(wifi);
 					callbackContext.success(newSSID + " successfully added.");
 				}
 				else {
