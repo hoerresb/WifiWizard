@@ -43,7 +43,7 @@ var WifiWizard = {
 	 *	This method is a helper method that returns a wifi object with WPA.
 	 */
 	formatWPAConfig: function(SSID, password) {
-		return formatWifiConfig(SSID, password, 'WPA');
+		return WifiWizard.formatWifiConfig(SSID, password, 'WPA');
 	},
 	
 	/**

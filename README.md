@@ -22,6 +22,7 @@ Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git` and 
 
 ### Changelog:
 
+* v0.2.1 - Fixed reference problem in `formatWPAConfig`
 * v0.2.0 - Changed format of wifiConfiguration object to allow more extensibility.
 * v0.1.1 - `addNetwork` will now update the network if the SSID already exists.
 * v0.1.0 - All functions now work!
