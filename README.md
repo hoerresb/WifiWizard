@@ -1,6 +1,6 @@
 # WifiWizard
 
-Version 0.2.1
+Version 0.2.2
 
 This Phonegap plugin enables WiFi management from within Phonegap applications. 
 
@@ -18,10 +18,13 @@ Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git` and 
 * `WifiWizard.removeNetwork(SSID, win, fail);` removes the network with the given SSID. As above, `win` and `fail` are callback functions.
 * `WifiWizard.connectNetwork(SSID, win, fail);` connects the phone to the given Wifi network. 
 * `WifiWizard.disconnectNetwork(SSID, win, fail);` disconnects the phone to the given Wifi network. 
-* `WifiWizard.listNetworks(listHandler, fail);` retrieves a list of the available networks as an array of strings and passes them to the function listHandler.
+* `WifiWizard.listNetworks(listHandler, fail);` retrieves a list of the configured networks as an array of strings and passes them to the function listHandler.
+* `WifiWizard.startScan(listHandler, fail);` start WiFi scanning.
+* `WifiWizard.getScanResults(listHandler, fail);` retrieves a list of the available networks as an array of strings and passes them to the function listHandler.
 
 ### Changelog:
 
+* v0.2.2 - Added `startScan` and `getScanResults`
 * v0.2.1 - Fixed reference problem in `formatWPAConfig`
 * v0.2.0 - Changed format of wifiConfiguration object to allow more extensibility.
 * v0.1.1 - `addNetwork` will now update the network if the SSID already exists.
