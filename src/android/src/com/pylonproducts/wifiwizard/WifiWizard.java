@@ -21,6 +21,7 @@ public class WifiWizard extends CordovaPlugin {
 	private static final String REMOVE_NETWORK = "removeNetwork";
 	private static final String CONNECT_NETWORK = "connectNetwork";
 	private static final String DISCONNECT_NETWORK = "disconnectNetwork";
+	private static final String DISCONNECT = "disconnect";
 	private static final String LIST_NETWORKS = "listNetworks";
 	private static final String START_SCAN = "startScan";
 	private static final String GET_SCAN_RESULTS = "getScanResults";
@@ -73,6 +74,10 @@ public class WifiWizard extends CordovaPlugin {
 
 		else if (action.equals(GET_SCAN_RESULTS)) {
 			return this.getScanResults(callbackContext);
+		}
+
+		else if (action.equals(DISCONNECT)) {
+			return this.disconnect(callbackContext);
 		}
 
 		callbackContext.error("Incorrect action parameter: " + action);
@@ -221,6 +226,9 @@ public class WifiWizard extends CordovaPlugin {
 		int networkIdToConnect = ssidToNetworkId(ssidToConnect);
 
 		if (networkIdToConnect > 0) {
+			// We disable the network before connecting, because if this was the last connection before
+			// a disconnect(), this will not reconnect.
+			wifiManager.disableNetwork(networkIdToConnect);
 			wifiManager.enableNetwork(networkIdToConnect, true);
 			callbackContext.success("Network " + ssidToConnect + " connected!");
 			return true;
@@ -272,6 +280,23 @@ public class WifiWizard extends CordovaPlugin {
 	}
 
 	/**
+	 *	This method disconnects current network.
+	 *
+	 *	@param	callbackContext		A Cordova callback context
+	 *	@return	true if network disconnected, false if failed
+	 */
+	private boolean disconnect(CallbackContext callbackContext) {
+		Log.d(TAG, "WifiWizard: disconnect entered.");
+		if (wifiManager.disconnect()) {
+			callbackContext.success("Disconnected from current network");
+			return true;
+		} else {
+			callbackContext.error("Unable to disconnect from the current network");
+			return false;
+		}
+	}
+
+	/**
 	 *	This method uses the callbackContext.success method to send a JSONArray
 	 *	of the currently configured networks.
 	 *
@@ -293,7 +318,7 @@ public class WifiWizard extends CordovaPlugin {
 		return true;
 	}
 
-  /**
+	/**
   	 *	This method uses the callbackContext.success method to send a JSONArray
   	 *	of the scanned networks.
   	 *
@@ -301,32 +326,32 @@ public class WifiWizard extends CordovaPlugin {
   	 *	@return	true
   	 */
 	private boolean getScanResults(CallbackContext callbackContext) {
-    List<ScanResult> scanResults = wifiManager.getScanResults();
+		List<ScanResult> scanResults = wifiManager.getScanResults();
 
-    JSONArray returnList = new JSONArray();
+		JSONArray returnList = new JSONArray();
 
-    for (ScanResult scan : scanResults) {
-      returnList.put(scan.SSID);
-    }
+		for (ScanResult scan : scanResults) {
+			returnList.put(scan.SSID);
+		}
 
-    callbackContext.success(returnList);
-    return true;
+		callbackContext.success(returnList);
+		return true;
 	}
 
-  /**
+	/**
   	 *	This method uses the callbackContext.success method. It starts a wifi scanning
   	 *
   	 *	@param	callbackContext		A Cordova callback context
   	 *	@return	true if started was successful
   	 */
 	private boolean startScan(CallbackContext callbackContext) {
-    if (wifiManager.startScan()) {
-      callbackContext.success();
-      return true;
-    } else {
-      callbackContext.error("Scan failed");
-      return false;
-    }
+		if (wifiManager.startScan()) {
+			callbackContext.success();
+			return true;
+		} else {
+			callbackContext.error("Scan failed");
+			return false;
+		}
 	}
 
 	/**
