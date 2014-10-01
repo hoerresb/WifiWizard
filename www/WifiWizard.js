@@ -129,7 +129,6 @@ var WifiWizard = {
 	 */
 	removeNetwork: function(SSID, win, fail) {
 		cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [WifiWizard.formatWifiString(SSID)]);
-
 	},
 
 	/**
@@ -167,32 +166,45 @@ var WifiWizard = {
 		cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
 	},
 
-  /**
-   *  Hands the list of scanned  networks to the `win` success callback function.
-   * @param 	win	callback function that receives list of networks
-   * @param 	fail	callback function if error
-   * @return		a list of networks
-   */
-  getScanResults: function(win, fail) {
-    if (typeof win != "function") {
-      console.log("getScanResults first parameter must be a function to handle list.");
-      return;
-    }
-    cordova.exec(win, fail, 'WifiWizard', 'getScanResults', []);
-  },
+	/**
+	 *  Hands the list of scanned  networks to the `win` success callback function.
+	 * @param 	win	callback function that receives list of networks
+	 * @param 	fail	callback function if error
+	 * @return		a list of networks
+	 */
+	getScanResults: function(win, fail) {
+		if (typeof win != "function") {
+			console.log("getScanResults first parameter must be a function to handle list.");
+			return;
+		}
+		cordova.exec(win, fail, 'WifiWizard', 'getScanResults', []);
+	},
 
-  /**
-   *  Start scanning wifi.
-   * @param 	win	callback function
-   * @param 	fail	callback function if error
-   */
-  startScan: function(win, fail) {
-    if (typeof win != "function") {
-      console.log("startScan first parameter must be a function to handle list.");
-      return;
-    }
-    cordova.exec(win, fail, 'WifiWizard', 'startScan', []);
-  }
+	/**
+	 *  Start scanning wifi.
+	 * @param 	win	callback function
+	 * @param 	fail	callback function if error
+	 */
+	startScan: function(win, fail) {
+		if (typeof win != "function") {
+			console.log("startScan first parameter must be a function to handle list.");
+			return;
+		}
+		cordova.exec(win, fail, 'WifiWizard', 'startScan', []);
+	},
+
+	/**
+	 *  Disconnect current wifi.
+	 * @param 	win	callback function
+	 * @param 	fail	callback function if error
+	 */
+	disconnect: function(win, fail) {
+		if (typeof win != "function") {
+			console.log("disconnect first parameter must be a function to handle list.");
+			return;
+		}
+		cordova.exec(win, fail, 'WifiWizard', 'disconnect', []);
+	}
 };
 
 // module.exports = WifiWizard;
