@@ -1,6 +1,6 @@
 # WifiWizard
 
-Version 0.2.2
+Version 0.2.3
 
 This Phonegap plugin enables WiFi management from within Phonegap applications. 
 
@@ -24,6 +24,7 @@ Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git` and 
 
 ### Changelog:
 
+* v0.2.3 - Added `disconnect` that does disconnection on current WiFi
 * v0.2.2 - Added `startScan` and `getScanResults`
 * v0.2.1 - Fixed reference problem in `formatWPAConfig`
 * v0.2.0 - Changed format of wifiConfiguration object to allow more extensibility.
