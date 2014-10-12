@@ -204,6 +204,19 @@ var WifiWizard = {
 			return;
 		}
 		cordova.exec(win, fail, 'WifiWizard', 'disconnect', []);
+	},
+
+	/**
+	 *  Gets the currently connected wifi SSID
+	 * @param 	win	callback function
+	 * @param 	fail	callback function if error
+	 */
+	getCurrentSSID: function(win, fail) {
+		if (typeof win != "function") {
+			console.log("getCurrentSSID first parameter must be a function to handle SSID.");
+			return;
+		}
+		cordova.exec(win, fail, 'WifiWizard', 'getConnectedSSID', []);
 	}
 };
 
