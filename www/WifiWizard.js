@@ -220,9 +220,9 @@ var WifiWizard = {
 	},
 
 	/**
-	 *  Gets true or false if WiFi is enabled or not
+	 *  Gets 'true' if WiFi is enabled
 	 * @param 	win	callback function
-	 * @param 	fail	callback function if error
+	 * @param 	fail	callback function if wifi is disabled
 	 */
 	isWifiEnabled: function(win, fail) {
 		if (typeof win != "function") {

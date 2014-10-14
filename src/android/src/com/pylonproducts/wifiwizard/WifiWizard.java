@@ -379,11 +379,11 @@ public class WifiWizard extends CordovaPlugin {
 	 * This method retrieves the current WiFi status
 	 *
 	 *	@param	callbackContext		A Cordova callback context
-	 *	@return	true if WiFi is enabled, false if not.
+	 *	@return	true if WiFi is enabled, fail will be called if not.
 	*/
 	private boolean isWifiEnabled(CallbackContext callbackContext) {
 		boolean isEnabled = wifiManager.isWifiEnabled();
-		callbackContext.success(isEnabled);
+		callbackContext.success(isEnabled ? "true" : "");
 		return isEnabled;
 	}
 
