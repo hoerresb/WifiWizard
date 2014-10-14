@@ -343,35 +343,35 @@ public class WifiWizard extends CordovaPlugin {
 
 	/**
 	 * This method retrieves the SSID for the currently connected network
-	 * 
+	 *
 	 *	@param	callbackContext		A Cordova callback context
 	 *	@return	true if SSID found, false if not.
 	*/
 	private boolean getConnectedSSID(CallbackContext callbackContext){
 		if(!wifiManager.isWifiEnabled()){
-			callbackContext.success("");
+			callbackContext.error("Wifi is disabled");
 			return false;
 		}
-		
+
 		WifiInfo info = wifiManager.getConnectionInfo();
-		
+
 		if(info == null){
-			callbackContext.success("");
+			callbackContext.error("Unable to read wifi info");
 			return false;
 		}
-		
+
 		String ssid = info.getSSID();
 		if(ssid.isEmpty())
 			ssid = info.getBSSID();
 		if(ssid.isEmpty()){
-			callbackContext.success("");
+			callbackContext.error("SSID is empty");
 			return false;
 		}
-		
+
 		callbackContext.success(ssid);
 		return true;
 	}
-	
+
 	/**
 	 *	This method takes a given String, searches the current list of configured WiFi
 	 * 	networks, and returns the networkId for the network if the SSID matches. If not,
