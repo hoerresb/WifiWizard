@@ -27,6 +27,7 @@ public class WifiWizard extends CordovaPlugin {
 	private static final String START_SCAN = "startScan";
 	private static final String GET_SCAN_RESULTS = "getScanResults";
 	private static final String GET_CONNECTED_SSID = "getConnectedSSID";
+	private static final String IS_WIFI_ENABLED = "isWifiEnabled";
 	private static final String TAG = "WifiWizard";
 
 	private WifiManager wifiManager;
@@ -65,6 +66,8 @@ public class WifiWizard extends CordovaPlugin {
 				return this.disconnect(callbackContext);
 		} else if(action.equals(GET_CONNECTED_SSID)) {
 				return this.getConnectedSSID(callbackContext);
+		} else if(action.equals(IS_WIFI_ENABLED)) {
+				return this.isWifiEnabled(callbackContext);
 		} else {
 			callbackContext.error("Incorrect action parameter: " + action);
 		}
@@ -370,6 +373,18 @@ public class WifiWizard extends CordovaPlugin {
 
 		callbackContext.success(ssid);
 		return true;
+	}
+
+	/**
+	 * This method retrieves the current WiFi status
+	 *
+	 *	@param	callbackContext		A Cordova callback context
+	 *	@return	true if WiFi is enabled, false if not.
+	*/
+	private boolean isWifiEnabled(CallbackContext callbackContext) {
+		boolean isEnabled = wifiManager.isWifiEnabled();
+		callbackContext.success(isEnabled);
+		return isEnabled;
 	}
 
 	/**

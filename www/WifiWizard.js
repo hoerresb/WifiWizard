@@ -217,6 +217,19 @@ var WifiWizard = {
 			return;
 		}
 		cordova.exec(win, fail, 'WifiWizard', 'getConnectedSSID', []);
+	},
+
+	/**
+	 *  Gets true or false if WiFi is enabled or not
+	 * @param 	win	callback function
+	 * @param 	fail	callback function if error
+	 */
+	isWifiEnabled: function(win, fail) {
+		if (typeof win != "function") {
+			console.log("isWifiEnabled first parameter must be a function to handle SSID.");
+			return;
+		}
+		cordova.exec(win, fail, 'WifiWizard', 'isWifiEnabled', []);
 	}
 };
 
