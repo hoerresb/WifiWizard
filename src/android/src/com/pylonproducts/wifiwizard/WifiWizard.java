@@ -27,6 +27,8 @@ public class WifiWizard extends CordovaPlugin {
 	private static final String START_SCAN = "startScan";
 	private static final String GET_SCAN_RESULTS = "getScanResults";
 	private static final String GET_CONNECTED_SSID = "getConnectedSSID";
+	private static final String IS_WIFI_ENABLED = "isWifiEnabled";
+	private static final String SET_WIFI_ENABLED = "setWifiEnabled";
 	private static final String TAG = "WifiWizard";
 
 	private WifiManager wifiManager;
@@ -44,9 +46,13 @@ public class WifiWizard extends CordovaPlugin {
 
 		this.callbackContext = callbackContext;
 
-		if (!wifiManager.isWifiEnabled()) {
-			callbackContext.error("Wifi is not enabled.");
-			return false;
+		if(action.equals(IS_WIFI_ENABLED)) {
+				return this.isWifiEnabled(callbackContext);
+		} else if(action.equals(SET_WIFI_ENABLED)) {
+				return this.setWifiEnabled(callbackContext, data);
+		} else if (!wifiManager.isWifiEnabled()) {
+				callbackContext.error("Wifi is not enabled.");
+				return false;
 		} else if(action.equals(ADD_NETWORK)) {
 				return this.addNetwork(callbackContext, data);
 		} else if(action.equals(REMOVE_NETWORK)) {
@@ -373,6 +379,18 @@ public class WifiWizard extends CordovaPlugin {
 	}
 
 	/**
+	 * This method retrieves the current WiFi status
+	 *
+	 *	@param	callbackContext		A Cordova callback context
+	 *	@return	true if WiFi is enabled, fail will be called if not.
+	*/
+	private boolean isWifiEnabled(CallbackContext callbackContext) {
+		boolean isEnabled = wifiManager.isWifiEnabled();
+		callbackContext.success(isEnabled ? "1" : "0");
+		return isEnabled;
+	}
+
+	/**
 	 *	This method takes a given String, searches the current list of configured WiFi
 	 * 	networks, and returns the networkId for the network if the SSID matches. If not,
 	 * 	it returns -1.
@@ -389,6 +407,34 @@ public class WifiWizard extends CordovaPlugin {
 		}
 
 		return networkId;
+	}
+
+	/**
+	 *	This method enables or disables the wifi
+	 */
+	private boolean setWifiEnabled(CallbackContext callbackContext, JSONArray data) {
+		if(!validateData(data)) {
+			callbackContext.error("WifiWizard: disconnectNetwork invalid data");
+			Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
+			return false;
+		}
+		String status = "";
+		try {
+			status = data.getString(0);
+		}
+		catch (Exception e) {
+			callbackContext.error(e.getMessage());
+			Log.d(TAG, e.getMessage());
+			return false;
+		}
+		//
+		if (wifiManager.setWifiEnabled(status.equals("true"))) {
+			callbackContext.success();
+			return true;
+		} else {
+			callbackContext.error("Cannot enable wifi");
+			return false;
+		}
 	}
 
 	private boolean validateData(JSONArray data) {
