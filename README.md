@@ -22,7 +22,7 @@ Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git` and 
 * `WifiWizard.startScan(listHandler, fail);` start WiFi scanning.
 * `WifiWizard.getScanResults(listHandler, fail);` retrieves a list of the available networks as an array of strings and passes them to the function listHandler.
 * `WifiWizard.getConnectedSSID(ssidHandler, fail);` retrieves the current SSID and passes it to ssidHandler.
-* `WifiWizard.isWifiEnabled(win, fail);` retrieves the current wifi status and passes 1 or 0 to handler.
+* `WifiWizard.isWifiEnabled(win, fail);` retrieves the current wifi status and passes `true` or `false` to the handler.
 * `WifiWizard.setWifiEnabled(enabled, win, fail);` set wifi status.
 
 ### Changelog:
