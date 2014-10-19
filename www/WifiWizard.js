@@ -229,7 +229,12 @@ var WifiWizard = {
 			console.log("isWifiEnabled first parameter must be a function to handle wifi status.");
 			return;
 		}
-		cordova.exec(win, fail, 'WifiWizard', 'isWifiEnabled', []);
+		cordova.exec(
+			function(result) {
+				win(!!result);
+			},
+			fail, 'WifiWizard', 'isWifiEnabled', []
+		);
 	},
 
 	/**
