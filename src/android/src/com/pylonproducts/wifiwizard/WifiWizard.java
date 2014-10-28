@@ -136,6 +136,25 @@ public class WifiWizard extends CordovaPlugin {
 				callbackContext.error("WEP unsupported");
 				return false;
 			}
+			else if (authType.equals("NONE")) {
+				String newSSID = data.getString(0);
+                wifi.SSID = newSSID;
+                wifi.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+                //
+                wifi.networkId = ssidToNetworkId(newSSID);
+
+				if ( wifi.networkId == -1 ) {
+					wifiManager.addNetwork(wifi);
+					callbackContext.success(newSSID + " successfully added.");
+				}
+				else {
+					wifiManager.updateNetwork(wifi);
+					callbackContext.success(newSSID + " successfully updated.");
+				}
+
+				wifiManager.saveConfiguration();
+				return true;
+			}
 			// TODO: Add more authentications as necessary
 			else {
 				Log.d(TAG, "Wifi Authentication Type Not Supported.");
@@ -457,4 +476,5 @@ public class WifiWizard extends CordovaPlugin {
 		}
 		return false;
 	}
+
 }
