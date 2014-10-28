@@ -324,7 +324,14 @@ public class WifiWizard extends CordovaPlugin {
 		JSONArray returnList = new JSONArray();
 
 		for (ScanResult scan : scanResults) {
-			returnList.put(scan.SSID);
+			JSONObject lvl = new JSONObject();
+			try {
+				lvl.put("level", wifiManager.calculateSignalLevel(scan.level, 6));
+				lvl.put("SSID", scan.SSID);
+				returnList.put(lvl);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 
 		callbackContext.success(returnList);
