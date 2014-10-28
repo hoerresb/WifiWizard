@@ -13,24 +13,26 @@ var WifiWizard = {
 	 * 	@return	wifiConfig	a JSON object properly formatted for the plugin.
 	 */
 	formatWifiConfig: function(SSID, password, algorithm) {
-		if (algorithm === 'WPA') {
-			var wifiConfig = {
-				'SSID': WifiWizard.formatWifiString(SSID),
-				'auth' : {
-					'algorithm' : algorithm,
-					'password' : WifiWizard.formatWifiString(password)
-					// Other parameters can be added depending on algorithm.
-				}
+		var wifiConfig = {
+			SSID: WifiWizard.formatWifiString(SSID)
+		};
+		if (!algorithm && !password) {
+			// open network
+			wifiConfig.auth = {
+				algorithm: 'NONE'
+			};
+		} else if (algorithm === 'WPA') {
+			wifiConfig.auth = {
+				algorithm : algorithm,
+				password : WifiWizard.formatWifiString(password)
+				// Other parameters can be added depending on algorithm.
 			};
 		}
 		else if (algorithm === 'New network type') {
-			var wifiConfig = {
-				'SSID' : WifiWizard.formatWifiString(SSID),
-				'auth' : {
-					'algorithm' : algorithm,
-					// Etc...
-				}
-			}
+			wifiConfig.auth = {
+				algorithm : algorithm
+				// Etc...
+			};
 		}
 		else {
 			console.log("Algorithm incorrect")
@@ -102,16 +104,21 @@ var WifiWizard = {
 
 		if (typeof wifi.auth == 'object') {
 
-			if (wifi.auth.algorithm === 'WPA') {
-				networkInformation.push(wifi.auth.algorithm);
+			switch (wifi.auth.algorithm) {
+			  case 'WPA':
+				networkInformation.push('WPA');
 				networkInformation.push(wifi.auth.password);
-			}
-			else if (wifi.auth.algorithm === 'Newly supported type') {
+				break;
+			  case 'NONE':
+				networkInformation.push('NONE');
+				break;
+			  case 'Newly supported type':
 				// Push values in specific order, and implement new type in the Java code.
-			}
-			else {
+				break;
+			  default:
 				console.log("WifiWizard: authentication invalid.");
 			}
+
 		}
 		else {
 			console.log('WifiWizard: No authentication algorithm given.');
