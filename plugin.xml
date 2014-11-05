@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	id="com.pylonproducts.wifiwizard"
-	version="0.2.6">
+	version="0.2.7">
 
     <name>WifiWizard</name>
     <description>This plugin allows Phonegap applications to manage Wifi connections.</description>
@@ -12,29 +12,25 @@
     <license>Apache 2.0</license>
 	<repo>https://github.com/parsonsmatt/WifiWizard/</repo>
 
-	<asset src="www/WifiWizard.js" target="WifiWizard.js" />
-	
-    <js-module src="www/WifiWizard.js" name="WifiWizard">
-        <runs />
+	<js-module src="www/WifiWizard.js" name="DynamicUpdate">
+        <clobbers target="WifiWizard" />
     </js-module>
 
     <platform name="android">
-		
+
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 			<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 		</config-file>
-		
-		<config-file target="res/xml/config.xml" parent="/*">	
+
+		<config-file target="res/xml/config.xml" parent="/*">
 			<feature name="WifiWizard">
 				<param name="android-package" value="com.pylonproducts.wifiwizard.WifiWizard" />
 				<param name="onload" value="true" />
 			</feature>
 		</config-file>
-		
-	<source-file src="src/android/src/com/pylonproducts/wifiwizard/WifiWizard.java" target-dir="src/com/pylonproducts/wifiwizard" />	
+
+	<source-file src="src/android/src/com/pylonproducts/wifiwizard/WifiWizard.java" target-dir="src/com/pylonproducts/wifiwizard" />
     </platform>
-    
+
 </plugin>
-
-
