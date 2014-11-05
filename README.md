@@ -27,6 +27,7 @@ Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git`
 
 ### Changelog:
 
+* v0.2.6 - Clobber WifiWizard.js automatically via Cordova plugin architecture
 * v0.2.6 - Added `isWifiEnabled`, `setWifiEnabled`
 * v0.2.5 - Fixes `getConnectedSSID` error handlers
 * v0.2.4 - Added `getConnectedSSID` method
