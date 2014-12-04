@@ -3,22 +3,17 @@
 
 @implementation NXWWifiWizard
 
-- (id)fetchSSIDInfo
-{
+- (id)fetchSSIDInfo {
     // see http://stackoverflow.com/a/5198968/907720
-    NSArray *ifs = (id)CNCopySupportedInterfaces();
-    NSLog(@"%s: Supported interfaces: %@", __func__, ifs);
-    id info = nil;
+    NSArray *ifs = (__bridge_transfer NSArray *)CNCopySupportedInterfaces();
+    NSLog(@"Supported interfaces: %@", ifs);
+    NSDictionary *info;
     for (NSString *ifnam in ifs) {
-        info = (id)CNCopyCurrentNetworkInfo((CFStringRef)ifnam);
-        NSLog(@"%s: %@ => %@", __func__, ifnam, info);
-        if (info && [info count]) {
-            break;
-        }
-        [info release];
+        info = (__bridge_transfer NSDictionary *)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        NSLog(@"%@ => %@", ifnam, info);
+        if (info && [info count]) { break; }
     }
-    [ifs release];
-    return [info autorelease];
+    return info;
 }
 
 - (void)addNetwork:(CDVInvokedUrlCommand*)command {
@@ -97,7 +92,7 @@
     CDVPluginResult *pluginResult = nil;
     NSDictionary *r = [self fetchSSIDInfo];
 
-    NSString *ssid = [r objectForKey:kCNNetworkInfoKeySSID]; //@"SSID"
+    NSString *ssid = [r objectForKey:(id)kCNNetworkInfoKeySSID]; //@"SSID"
 
     if (ssid && [ssid length]) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:ssid];
