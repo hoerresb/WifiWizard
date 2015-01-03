@@ -47,31 +47,43 @@ public class WifiWizard extends CordovaPlugin {
         this.callbackContext = callbackContext;
 
         if(action.equals(IS_WIFI_ENABLED)) {
-                return this.isWifiEnabled(callbackContext);
-        } else if(action.equals(SET_WIFI_ENABLED)) {
-                return this.setWifiEnabled(callbackContext, data);
-        } else if (!wifiManager.isWifiEnabled()) {
-                callbackContext.error("Wifi is not enabled.");
-                return false;
-        } else if(action.equals(ADD_NETWORK)) {
-                return this.addNetwork(callbackContext, data);
-        } else if(action.equals(REMOVE_NETWORK)) {
-                return this.removeNetwork(callbackContext, data);
-        } else if(action.equals(CONNECT_NETWORK)) {
-                return this.connectNetwork(callbackContext, data);
-        } else if(action.equals(DISCONNECT_NETWORK)) {
-                return this.disconnectNetwork(callbackContext, data);
-        } else if(action.equals(LIST_NETWORKS)) {
-                return this.listNetworks(callbackContext);
-        } else if(action.equals(START_SCAN)) {
-                return this.startScan(callbackContext);
-        } else if(action.equals(GET_SCAN_RESULTS)) {
-                return this.getScanResults(callbackContext);
-        } else if(action.equals(DISCONNECT)) {
-                return this.disconnect(callbackContext);
-        } else if(action.equals(GET_CONNECTED_SSID)) {
-                return this.getConnectedSSID(callbackContext);
-        } else {
+            return this.isWifiEnabled(callbackContext);
+        }
+        else if(action.equals(SET_WIFI_ENABLED)) {
+            return this.setWifiEnabled(callbackContext, data);
+        }
+        else if (!wifiManager.isWifiEnabled()) {
+            callbackContext.error("Wifi is not enabled.");
+            return false;
+        }
+        else if(action.equals(ADD_NETWORK)) {
+            return this.addNetwork(callbackContext, data);
+        }
+        else if(action.equals(REMOVE_NETWORK)) {
+            return this.removeNetwork(callbackContext, data);
+        }
+        else if(action.equals(CONNECT_NETWORK)) {
+            return this.connectNetwork(callbackContext, data);
+        }
+        else if(action.equals(DISCONNECT_NETWORK)) {
+            return this.disconnectNetwork(callbackContext, data);
+        }
+        else if(action.equals(LIST_NETWORKS)) {
+            return this.listNetworks(callbackContext);
+        }
+        else if(action.equals(START_SCAN)) {
+            return this.startScan(callbackContext);
+        }
+        else if(action.equals(GET_SCAN_RESULTS)) {
+            return this.getScanResults(callbackContext);
+        }
+        else if(action.equals(DISCONNECT)) {
+            return this.disconnect(callbackContext);
+        }
+        else if(action.equals(GET_CONNECTED_SSID)) {
+            return this.getConnectedSSID(callbackContext);
+        }
+        else {
             callbackContext.error("Incorrect action parameter: " + action);
         }
 
@@ -140,7 +152,6 @@ public class WifiWizard extends CordovaPlugin {
                 String newSSID = data.getString(0);
                 wifi.SSID = newSSID;
                 wifi.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-                //
                 wifi.networkId = ssidToNetworkId(newSSID);
 
                 if ( wifi.networkId == -1 ) {
@@ -327,6 +338,7 @@ public class WifiWizard extends CordovaPlugin {
         }
 
         callbackContext.success(returnList);
+
         return true;
     }
 
@@ -367,7 +379,8 @@ public class WifiWizard extends CordovaPlugin {
         if (wifiManager.startScan()) {
             callbackContext.success();
             return true;
-        } else {
+        }
+        else {
             callbackContext.error("Scan failed");
             return false;
         }
@@ -393,8 +406,9 @@ public class WifiWizard extends CordovaPlugin {
         }
 
         String ssid = info.getSSID();
-        if(ssid.isEmpty())
+        if(ssid.isEmpty()) {
             ssid = info.getBSSID();
+        }
         if(ssid.isEmpty()){
             callbackContext.error("SSID is empty");
             return false;
@@ -444,7 +458,9 @@ public class WifiWizard extends CordovaPlugin {
             Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
             return false;
         }
+        
         String status = "";
+        
         try {
             status = data.getString(0);
         }
@@ -453,10 +469,12 @@ public class WifiWizard extends CordovaPlugin {
             Log.d(TAG, e.getMessage());
             return false;
         }
+        
         if (wifiManager.setWifiEnabled(status.equals("true"))) {
             callbackContext.success();
             return true;
-        } else {
+        } 
+        else {
             callbackContext.error("Cannot enable wifi");
             return false;
         }
