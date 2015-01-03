@@ -237,7 +237,7 @@ public class WifiWizard extends CordovaPlugin {
 
         int networkIdToConnect = ssidToNetworkId(ssidToConnect);
 
-        if (networkIdToConnect > 0) {
+        if (networkIdToConnect >= 0) {
             // We disable the network before connecting, because if this was the last connection before
             // a disconnect(), this will not reconnect.
             wifiManager.disableNetwork(networkIdToConnect);
@@ -453,7 +453,6 @@ public class WifiWizard extends CordovaPlugin {
             Log.d(TAG, e.getMessage());
             return false;
         }
-        //
         if (wifiManager.setWifiEnabled(status.equals("true"))) {
             callbackContext.success();
             return true;
