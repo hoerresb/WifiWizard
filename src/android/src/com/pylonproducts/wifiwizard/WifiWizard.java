@@ -359,6 +359,7 @@ public class WifiWizard extends CordovaPlugin {
             try {
                 lvl.put("level", wifiManager.calculateSignalLevel(scan.level, 5));
                 lvl.put("SSID", scan.SSID);
+                lvl.put("BSSID", scan.BSSID);
                 returnList.put(lvl);
             } catch (JSONException e) {
                 e.printStackTrace();
