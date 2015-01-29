@@ -1,7 +1,3 @@
-/*
- * This is the interface for the WifiWizard Phonegap plugin.
- */
-
 var WifiWizard = (function() {
 
     /**
@@ -21,7 +17,7 @@ var WifiWizard = (function() {
 
     WifiConfig.prototype.setSSID(ssid) {
         if( util.ssidIsValid(ssid) ) {
-            this.ssid = ssid;
+            this.ssid = util.formatSSID(ssid);
         }
         else {
             throw new SSIDFormatException(ssid);
@@ -55,6 +51,7 @@ var WifiWizard = (function() {
          *  Helper method that validates an SSID.
          */
         ssidIsValid: function(ssid) {
+            return typeof ssid === "string" || ssid instanceof String;
         },
 
         /**
@@ -78,7 +75,7 @@ var WifiWizard = (function() {
             }
 
             return ssid;
-        },
+        }
     };
 
     /* 
