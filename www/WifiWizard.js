@@ -4,6 +4,86 @@
 
 var WifiWizard = (function() {
 
+    /**
+     *  Constructor function for a WifiConfig object. WifiConfig has two
+     *  properties:
+     *  * ssid      String of the SSID. This must be wrapped in double quotes:
+     *              eg, '"this is an ssid"' or "\"hello\""
+     *  * auth      an object of type WifiAuth
+     */
+    function WifiConfig(ssid, auth) {
+        this.ssid="";
+        this.auth={};
+
+        this.setSSID(ssid);
+        this.setAuth(auth);
+    }
+
+    WifiConfig.prototype.setSSID(ssid) {
+        if( util.ssidIsValid(ssid) ) {
+            this.ssid = ssid;
+        }
+        else {
+            throw new SSIDFormatException(ssid);
+        }
+
+        return this;
+    }
+
+    function SSIDFormatException(ssid) {
+        this.ssid = ssid;
+        this.message = ": ssid format incorrect";
+        this.toString = function() {
+            return this.ssid + this.message;
+        };
+    }
+
+    /**
+     *  Creates a Wifi Authentication object. Required by WifiConfig in order
+     *  to connect to a network.
+     */
+
+    function WifiAuth() {
+
+    }
+
+    /**
+     *  Utility method wrapper.
+     */
+    var util = {
+        /**
+         *  Helper method that validates an SSID.
+         */
+        ssidIsValid: function(ssid) {
+        },
+
+        /**
+         *	This method formats a given SSID and ensures that it is appropriate.
+         *	If the SSID is not wrapped in double quotes, it wraps it in double quotes.
+         * Despite the name, this also needs to be done to WPA PSK.
+         *	@param	ssid	the SSID to format
+         */
+        formatSSID: function(ssid) {
+            if (ssid === undefined || ssid === null) {
+                ssid = "";
+            }
+            ssid = ssid.trim();
+
+            if (ssid.charAt(0) != '"' ) {
+                ssid = '"' + ssid;
+            }
+
+            if (ssid.charAt(ssid.length-1) != '"' ) {
+                ssid = ssid + '"';
+            }
+
+            return ssid;
+        },
+    };
+
+    /* 
+     * Interface methods
+     */
     return {
 
         /**
@@ -16,7 +96,7 @@ var WifiWizard = (function() {
          */
         formatWifiConfig: function(SSID, password, algorithm) {
             var wifiConfig = {
-                SSID: WifiWizard.formatWifiString(SSID)
+                SSID: util.formatSSID(SSID)
             };
             if (!algorithm && !password) {
                 // open network
@@ -25,8 +105,8 @@ var WifiWizard = (function() {
                 };
             } else if (algorithm === 'WPA') {
                 wifiConfig.auth = {
-                    algorithm : algorithm,
-                    password : WifiWizard.formatWifiString(password)
+                    algorithm: algorithm,
+                    password : util.formatSSID(password)
                     // Other parameters can be added depending on algorithm.
                 };
             }
@@ -50,28 +130,6 @@ var WifiWizard = (function() {
             return WifiWizard.formatWifiConfig(SSID, password, 'WPA');
         },
 
-        /**
-         *	This method formats a given SSID and ensures that it is appropriate.
-         *	If the SSID is not wrapped in double quotes, it wraps it in double quotes.
-         * Despite the name, this also needs to be done to WPA PSK.
-         *	@param	ssid	the SSID to format
-         */
-        formatWifiString: function(ssid) {
-            if (ssid === undefined || ssid === null) {
-                ssid = "";
-            }
-            ssid = ssid.trim()
-
-            if (ssid.charAt(0) != '"' ) {
-                ssid = '"' + ssid;
-            }
-
-            if (ssid.charAt(ssid.length-1) != '"' ) {
-                ssid = ssid + '"';
-            }
-
-            return ssid;
-        },
 
         /**
          * This methods adds a network to the list of available networks.
@@ -137,7 +195,7 @@ var WifiWizard = (function() {
          *	@param	fail		function to handle error callback
          */
         removeNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [WifiWizard.formatWifiString(SSID)]);
+            cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [util.formatSSID(SSID)]);
         },
 
         /**
@@ -147,7 +205,7 @@ var WifiWizard = (function() {
          * @param	fail		function that is called to handle errors
          */
         connectNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [WifiWizard.formatWifiString(SSID)]);
+            cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [util.formatSSID(SSID)]);
         },
 
         /**
@@ -157,7 +215,7 @@ var WifiWizard = (function() {
          * @param	fail		function that is called to handle errors
          */
         disconnectNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [WifiWizard.formatWifiString(SSID)]);
+            cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [util.formatSSID(SSID)]);
 
         },
 
@@ -233,18 +291,16 @@ var WifiWizard = (function() {
          * @param 	win	callback function
          * @param 	fail
          */
-        isWifiEnabled: function(win, fail) {
-            if (typeof win != "function") {
-                console.log("isWifiEnabled first parameter must be a function to handle wifi status.");
-                return;
-            }
-            cordova.exec(
-                function(result) {
-                win(!!result);
-            },
-            fail, 'WifiWizard', 'isWifiEnabled', []
-            );
-        },
+isWifiEnabled: function(win, fail) {
+                   if (typeof win != "function") {
+                       console.log("isWifiEnabled first parameter must be a function to handle wifi status.");
+                       return;
+                   }
+                   cordova.exec(function(result) {
+                           win(!!result);
+                           }, fail, 'WifiWizard', 'isWifiEnabled', []
+                           );
+               },
 
         /**
          *  Gets '1' if WiFi is enabled
