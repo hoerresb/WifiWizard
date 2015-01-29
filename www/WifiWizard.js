@@ -51,7 +51,7 @@ var WifiWizard = (function() {
          *  Helper method that validates an SSID.
          */
         ssidIsValid: function(ssid) {
-            return typeof ssid === "string" || ssid instanceof String;
+            return (typeof ssid === "string" || ssid instanceof String) && ssid.length <= 32;
         },
 
         /**
