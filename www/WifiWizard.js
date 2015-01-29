@@ -26,6 +26,17 @@ var WifiWizard = (function() {
         return this;
     }
 
+    WifiConfig.prototype.setAuth(auth) {
+        if (util.authIsValid(auth) ) {
+            this.auth = auth;
+        }
+        else {
+            throw new InvalidAuthException(auth);
+        }
+
+        return this;
+    }
+
     function SSIDFormatException(ssid) {
         this.ssid = ssid;
         this.message = ": ssid format incorrect";
@@ -38,20 +49,20 @@ var WifiWizard = (function() {
      *  Creates a Wifi Authentication object. Required by WifiConfig in order
      *  to connect to a network.
      */
-
     function WifiAuth() {
-
+        this.algorithm;
+        this.psk;
     }
 
     /**
      *  Utility method wrapper.
      */
     var util = {
-        /**
-         *  Helper method that validates an SSID.
-         */
         ssidIsValid: function(ssid) {
             return (typeof ssid === "string" || ssid instanceof String) && ssid.length <= 32;
+        },
+        authIsValid: function(auth) {
+            return auth instanceof WifiAuth;
         },
 
         /**
