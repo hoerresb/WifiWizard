@@ -8,62 +8,41 @@ var WifiWizard = (function() {
      *  * auth      an object of type WifiAuth
      */
     function WifiConfig(ssid, auth) {
-        this.ssid="";
-        this.auth={};
+        var _ssid = null;
+        var _auth = null;
+        var self = this;
 
-        this.setSSID(ssid);
-        this.setAuth(auth);
-    }
+        this.ssid(ssid);
+        this.auth(auth);
 
-    WifiConfig.prototype.setSSID(ssid) {
-        if( util.ssidIsValid(ssid) ) {
-            this.ssid = util.formatSSID(ssid);
-        }
-        else {
-            throw new SSIDFormatException(ssid);
-        }
+        this.ssid = function(ssid) {
+            if (ssid === undefined) {
+                return self._ssid;
+            }
 
-        return this;
-    }
-
-    WifiConfig.prototype.setAuth(auth) {
-        if (util.authIsValid(auth) ) {
-            this.auth = auth;
-        }
-        else {
-            throw new InvalidAuthException(auth);
-        }
-
-        return this;
-    }
-
-    function SSIDFormatException(ssid) {
-        this.ssid = ssid;
-        this.message = ": ssid format incorrect";
-        this.toString = function() {
-            return this.ssid + this.message;
+            if( ssidIsValid(ssid) ) {
+                this.ssid = formatSSID(ssid);
+            }
+            else {
+                throw new SSIDFormatException(ssid);
+            }
+            return this;
         };
-    }
 
-    /**
-     *  Creates a Wifi Authentication object. Required by WifiConfig in order
-     *  to connect to a network.
-     */
-    function WifiAuth() {
-        this.algorithm;
-        this.psk;
-    }
+        this.auth = function(auth) {
+            if (auth === undefined) {
+                return self._auth; // TODO: Clone object instead of returning reference
+            }
+            
+            if ( util.authIsValid(auth) ) {
+                self._auth = auth;
+            }
+            else {
+                throw new InvalidAuthException(auth);
+            }
 
-    /**
-     *  Utility method wrapper.
-     */
-    var util = {
-        ssidIsValid: function(ssid) {
-            return (typeof ssid === "string" || ssid instanceof String) && ssid.length <= 32;
-        },
-        authIsValid: function(auth) {
-            return auth instanceof WifiAuth;
-        },
+            return this;
+        };
 
         /**
          *	This method formats a given SSID and ensures that it is appropriate.
@@ -71,7 +50,7 @@ var WifiWizard = (function() {
          * Despite the name, this also needs to be done to WPA PSK.
          *	@param	ssid	the SSID to format
          */
-        formatSSID: function(ssid) {
+        function formatSSID(ssid) {
             if (ssid === undefined || ssid === null) {
                 ssid = "";
             }
@@ -87,7 +66,39 @@ var WifiWizard = (function() {
 
             return ssid;
         }
-    };
+
+        function ssidIsValid(ssid) {
+            return (typeof ssid === "string" || ssid instanceof String) && ssid.length <= 32;
+        }
+                
+    }
+
+    function SSIDFormatException(ssid, message) {
+        this.ssid = ssid;
+        this.message = message || "ssid format incorrect";
+        this.toString = function() {
+            return this.ssid + ": " + this.message;
+        };
+    }
+
+    /**
+     *  Creates a Wifi Authentication object. Required by WifiConfig in order
+     *  to connect to a network. Can be extended to include other algorithms.
+     */
+    function WifiAuth() {
+        var _algorithm;
+        var _psk;
+
+        var that = this;
+
+        this.algorithm = function(algorithm) {
+            if (algorithm === undefined) {
+                return that._algorithm;
+            }
+
+            // TODO: Validate algorithm, set if OK
+        };
+    }
 
     /* 
      * Interface methods
