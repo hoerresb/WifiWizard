@@ -29,9 +29,36 @@ var WifiWizard = (function() {
      */
     this.removeNetwork = function(network, win, fail) {
         var remove = network instanceof WifiConfig ? network.ssid() : network;
-        cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', remove);
+        cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [remove]);
     };
 
+    /**
+     * This method connects to a network. The network may be specified either
+     * as a string or a WifiConfig object. If the parameter is a string, then 
+     * it must be wrapped in double quotes.
+     *
+     * @param {string|WifiConfig} network   The network to connect
+     * @param {callback}    win     success callback
+     * @param {callback}    fail    error callback
+     */
+    this.connect = function(network, win, fail) {
+        var connect = network instanceof WifiConfig ? network.ssid() : network;
+        cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [connect]);
+    };
+
+    /**
+     * This method disconnects a network if it has been configured. The network
+     * can be specified as a double quote wrapped string or as a WifiConfig
+     * object.
+     *
+     * @param {string|WifiConfig} network the network to disconnect
+     * @param {callback}    win     success callback
+     * @param {callback}    fail    error callback
+     */
+    this.disconnect = function(network, win, fail) {
+        var disconnect = network instanceof WifiConfig ? network.ssid() : network;
+        cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [disconnect]);
+    };
     return {
 
         /**
@@ -78,29 +105,6 @@ var WifiWizard = (function() {
             return wifiwizard.formatwificonfig(ssid, password, 'wpa');
         },
 
-
-
-
-        /**
-         *	This method connects a network if it is configured.
-         *	@param	SSID	the network to connect
-         *	@param	win		function that is called if successful
-         * @param	fail		function that is called to handle errors
-         */
-        connectNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [util.wrapInQuotes(SSID)]);
-        },
-
-        /**
-         *	This method disconnects a network if it is configured.
-         *	@param	SSID	the network to disconnect
-         *	@param	win		function that is called if successful
-         * @param	fail		function that is called to handle errors
-         */
-        disconnectNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [util.wrapInQuotes(SSID)]);
-
-        },
 
         /**
          *	Hands the list of previously used and configured networks to the `win` success callback function.
