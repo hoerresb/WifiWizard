@@ -1,201 +1,100 @@
+var WifiConfig = require('./WifiConfig.js');
+var WifiAuth = require('./WifiAuth.js');
+
 var WifiWizard = (function() {
-
-    /**
-     *  Constructor function for a WifiConfig object. WifiConfig has two
-     *  properties:
-     *  * ssid      String of the SSID. This must be wrapped in double quotes:
-     *              eg, '"this is an ssid"' or "\"hello\""
-     *  * auth      an object of type WifiAuth
-     */
-    function WifiConfig(ssid, auth) {
-        var _ssid = null;
-        var _auth = null;
-        var self = this;
-
-        this.ssid(ssid);
-        this.auth(auth);
-
-        this.ssid = function(ssid) {
-            if (ssid === undefined) {
-                return self._ssid;
-            }
-
-            if( ssidIsValid(ssid) ) {
-                this.ssid = formatSSID(ssid);
-            }
-            else {
-                throw new SSIDFormatException(ssid);
-            }
-            return this;
-        };
-
-        this.auth = function(auth) {
-            if (auth === undefined) {
-                return self._auth; // TODO: Clone object instead of returning reference
-            }
-            
-            if ( util.authIsValid(auth) ) {
-                self._auth = auth;
-            }
-            else {
-                throw new InvalidAuthException(auth);
-            }
-
-            return this;
-        };
-
-        /**
-         *	This method formats a given SSID and ensures that it is appropriate.
-         *	If the SSID is not wrapped in double quotes, it wraps it in double quotes.
-         * Despite the name, this also needs to be done to WPA PSK.
-         *	@param	ssid	the SSID to format
-         */
-        function formatSSID(ssid) {
-            if (ssid === undefined || ssid === null) {
-                ssid = "";
-            }
-            ssid = ssid.trim();
-
-            if (ssid.charAt(0) != '"' ) {
-                ssid = '"' + ssid;
-            }
-
-            if (ssid.charAt(ssid.length-1) != '"' ) {
-                ssid = ssid + '"';
-            }
-
-            return ssid;
-        }
-
-        function ssidIsValid(ssid) {
-            return (typeof ssid === "string" || ssid instanceof String) && ssid.length <= 32;
-        }
-                
-    }
-
-    function SSIDFormatException(ssid, message) {
-        this.ssid = ssid;
-        this.message = message || "ssid format incorrect";
-        this.toString = function() {
-            return this.ssid + ": " + this.message;
-        };
-    }
-
-    /**
-     *  Creates a Wifi Authentication object. Required by WifiConfig in order
-     *  to connect to a network. Can be extended to include other algorithms.
-     */
-    function WifiAuth() {
-        var _algorithm;
-        var _psk;
-
-        var that = this;
-
-        this.algorithm = function(algorithm) {
-            if (algorithm === undefined) {
-                return that._algorithm;
-            }
-
-            // TODO: Validate algorithm, set if OK
-        };
-    }
-
-    /* 
-     * Interface methods
-     */
     return {
 
         /**
-         * 	This method formats wifi information into an object for use with the
-         * 	addNetwork function. Currently only supports
-         *		@param SSID			the SSID of the network enclosed in double quotes
+         * 	this method formats wifi information into an object for use with the
+         * 	addnetwork function. currently only supports
+         *		@param ssid			the ssid of the network enclosed in double quotes
          *		@param password		the password for the network enclosed in double quotes
          * 	@param algorithm	the authentication algorithm
-         * 	@return	wifiConfig	a JSON object properly formatted for the plugin.
+         * 	@return	wificonfig	a json object properly formatted for the plugin.
          */
-        formatWifiConfig: function(SSID, password, algorithm) {
-            var wifiConfig = {
-                SSID: util.formatSSID(SSID)
+        formatwificonfig: function(ssid, password, algorithm) {
+            var wificonfig = {
+                ssid: util.formatssid(ssid)
             };
             if (!algorithm && !password) {
                 // open network
-                wifiConfig.auth = {
-                    algorithm: 'NONE'
+                wificonfig.auth = {
+                    algorithm: 'none'
                 };
-            } else if (algorithm === 'WPA') {
-                wifiConfig.auth = {
+            } else if (algorithm === 'wpa') {
+                wificonfig.auth = {
                     algorithm: algorithm,
-                    password : util.formatSSID(password)
-                    // Other parameters can be added depending on algorithm.
+                    password : util.formatssid(password)
+                    // other parameters can be added depending on algorithm.
                 };
             }
-            else if (algorithm === 'New network type') {
-                wifiConfig.auth = {
+            else if (algorithm === 'new network type') {
+                wificonfig.auth = {
                     algorithm : algorithm
-                    // Etc...
+                    // etc...
                 };
             }
             else {
-                console.log("Algorithm incorrect")
+                console.log("algorithm incorrect")
                 return false;
             }
-            return wifiConfig;
+            return wificonfig;
         },
 
         /**
-         *	This method is a helper method that returns a wifi object with WPA.
+         *	this method is a helper method that returns a wifi object with wpa.
          */
-        formatWPAConfig: function(SSID, password) {
-            return WifiWizard.formatWifiConfig(SSID, password, 'WPA');
+        formatwpaconfig: function(ssid, password) {
+            return wifiwizard.formatwificonfig(ssid, password, 'wpa');
         },
 
 
         /**
-         * This methods adds a network to the list of available networks.
-         * Currently, only WPA authentication method is supported.
+         * this methods adds a network to the list of available networks.
+         * currently, only wpa authentication method is supported.
          *
-         * @param 	wifi is JSON formatted information necessary for adding the Wifi
-         * 			network, as is done in formatWifiConfig.
+         * @param 	wifi is json formatted information necessary for adding the wifi
+         * 			network, as is done in formatwificonfig.
          * @param 	win is a callback function that gets called if the plugin is
          * 			successful.
          * @param 	fail is a callback function that gets called if the plugin gets
          * 			an error
          */
-        addNetwork: function(wifi, win, fail) {
-            //console.log("WifiWizard add method entered.");
+        addnetwork: function(wifi, win, fail) {
+            //console.log("wifiwizard add method entered.");
             if (wifi !== null && typeof wifi === 'object') {
-                // Ok to proceed!
+                // ok to proceed!
             }
             else {
-                console.log('WifiWizard: Invalid parameter. wifi not an object.');
+                console.log('wifiwizard: invalid parameter. wifi not an object.');
             }
 
-            var networkInformation = [];
+            var networkinformation = [];
 
-            if (wifi.SSID !== undefined && wifi.SSID !== '') {
-                networkInformation.push(wifi.SSID);
+            if (wifi.ssid !== undefined && wifi.ssid !== '') {
+                networkinformation.push(wifi.ssid);
             }
             else {
                 // i dunno, like, reject the call or something? what are you even doing?
-                console.log('WifiWizard: No SSID given.');
+                console.log('wifiwizard: no ssid given.');
                 return false;
             }
 
             if (typeof wifi.auth == 'object') {
 
                 switch (wifi.auth.algorithm) {
-                    case 'WPA':
-                        networkInformation.push('WPA');
-                    networkInformation.push(wifi.auth.password);
+                    case 'wpa':
+                        networkinformation.push('wpa');
+                    networkinformation.push(wifi.auth.password);
                     break;
-                    case 'NONE':
-                        networkInformation.push('NONE');
+                    case 'none':
+                        networkinformation.push('none');
                     break;
-                    case 'Newly supported type':
-                        // Push values in specific order, and implement new type in the Java code.
+                    case 'newly supported type':
+                        // push values in specific order, and implement new type in the java code.
                         break;
                     default:
-                        console.log("WifiWizard: authentication invalid.");
+                        console.log("wifiwizard: authentication invalid.");
                 }
 
             }
