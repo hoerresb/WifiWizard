@@ -1,7 +1,7 @@
-var WifiConfig = require('./WifiConfig.js');
-var WifiAuth = require('./WifiAuth.js');
-
 var WifiWizard = (function() {
+    var WifiConfig = require('WifiConfig');
+    var WifiAuth = require('WifiAuth');
+
     return {
 
         /**
