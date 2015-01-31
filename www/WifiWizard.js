@@ -59,6 +59,20 @@ var WifiWizard = (function() {
         var disconnect = network instanceof WifiConfig ? network.ssid() : network;
         cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [disconnect]);
     };
+
+    /**
+     * Hands the list of previously used and configured networks to the `win` success callback function.
+     *
+     * @param {callback}    win     function that handles array of networks
+     * @param {callback}    fail    error callback
+     */
+    this.listNetworks = function(win, fail) {
+        if (typeof win != "function") {
+            throw new Error("listNetworks first parameter must be a function to handle list.");
+        }
+        cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
+    };
+
     return {
 
         /**
@@ -105,20 +119,6 @@ var WifiWizard = (function() {
             return wifiwizard.formatwificonfig(ssid, password, 'wpa');
         },
 
-
-        /**
-         *	Hands the list of previously used and configured networks to the `win` success callback function.
-         * @param 	win	callback function that receives list of networks
-         * @param 	fail	callback function if error
-         * @return		a list of networks
-         */
-        listNetworks: function(win, fail) {
-            if (typeof win != "function") {
-                console.log("listNetworks first parameter must be a function to handle list.");
-                return;
-            }
-            cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
-        },
 
         /**
          *  Hands the list of scanned  networks to the `win` success callback function.
