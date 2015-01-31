@@ -11,17 +11,19 @@ function WifiConfig(ssid, auth) {
     var self = this;
 
     var WifiAuth = require('WifiAuth');
+
     this.ssid = function(ssid) {
         if (ssid === undefined) {
             return self._ssid;
         }
 
         if( ssidIsValid(ssid) ) {
-            this.ssid = formatSSID(ssid);
+            self._ssid = formatSSID(ssid);
         }
         else {
-            throw new SSIDFormatException(ssid);
+            throw new Error("SSID Invalid");
         }
+
         return this;
     };
 
@@ -29,8 +31,12 @@ function WifiConfig(ssid, auth) {
         if (auth === undefined) {
             return self._auth; // TODO: Clone object instead of returning reference
         }
-
-        self._auth = auth;
+        else if (auth instanceof WifiAuth) {
+            self._auth = auth;
+        }
+        else {
+            throw new Error("Auth must be object of type WifiAuth");
+        }
 
         return this;
     };
@@ -64,14 +70,6 @@ function WifiConfig(ssid, auth) {
 
     // Initialize object
     this.ssid(ssid).auth(auth);
-}
-
-function SSIDFormatException(ssid, message) {
-    this.ssid = ssid;
-    this.message = message || "ssid format incorrect";
-    this.toString = function() {
-        return this.ssid + ": " + this.message;
-    };
 }
 
 module.exports = WifiConfig;

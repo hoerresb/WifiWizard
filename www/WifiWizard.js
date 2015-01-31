@@ -2,6 +2,32 @@ var WifiWizard = (function() {
     var WifiConfig = require('WifiConfig');
     var WifiAuth = require('WifiAuth');
 
+    this.addNetwork = function(wifi, win, fail) {
+        if (wifi instanceof WifiConfig === false) {
+            throw new Error("WifiConfig must be WifiConfig object");
+        }
+
+        var networkInformation = wifi.toArray();
+
+        switch (wifi.auth().algorithm()) {
+            case 'wpa':
+                networkInformation.push('wpa');
+                networkInformation.push(wifi.auth().psk());
+            break;
+            case 'none':
+                networkInformation.push('none');
+            break;
+            case 'newly supported type':
+                // push values in specific order, and implement new type in the java code.
+                break;
+            default:
+                console.log("wifiwizard: authentication invalid.");
+        }
+
+
+        cordova.exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);
+    };
+
     return {
 
         /**
@@ -15,7 +41,7 @@ var WifiWizard = (function() {
         formatwificonfig: function(ssid, password, algorithm) {
             var wificonfig = {
                 ssid: util.formatssid(ssid)
-            };
+      };
             if (!algorithm && !password) {
                 // open network
                 wificonfig.auth = {
@@ -60,51 +86,6 @@ var WifiWizard = (function() {
          * @param 	fail is a callback function that gets called if the plugin gets
          * 			an error
          */
-        addnetwork: function(wifi, win, fail) {
-            //console.log("wifiwizard add method entered.");
-            if (wifi !== null && typeof wifi === 'object') {
-                // ok to proceed!
-            }
-            else {
-                console.log('wifiwizard: invalid parameter. wifi not an object.');
-            }
-
-            var networkinformation = [];
-
-            if (wifi.ssid !== undefined && wifi.ssid !== '') {
-                networkinformation.push(wifi.ssid);
-            }
-            else {
-                // i dunno, like, reject the call or something? what are you even doing?
-                console.log('wifiwizard: no ssid given.');
-                return false;
-            }
-
-            if (typeof wifi.auth == 'object') {
-
-                switch (wifi.auth.algorithm) {
-                    case 'wpa':
-                        networkinformation.push('wpa');
-                    networkinformation.push(wifi.auth.password);
-                    break;
-                    case 'none':
-                        networkinformation.push('none');
-                    break;
-                    case 'newly supported type':
-                        // push values in specific order, and implement new type in the java code.
-                        break;
-                    default:
-                        console.log("wifiwizard: authentication invalid.");
-                }
-
-            }
-            else {
-                console.log('WifiWizard: No authentication algorithm given.');
-                return false;
-            }
-
-            cordova.exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);
-        },
 
         /**
          *	This method removes a given network from the list of configured networks.
