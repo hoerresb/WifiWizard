@@ -74,7 +74,18 @@ var WifiWizard = (function() {
     };
 
     /**
+     * Begins scanning the wifi.
+     *
+     * @param {callback}    win     success callback
+     * @param {callback}    fail    error callback
+     */
+    this.startScan = function(win, fail) {
+        cordova.exec(win, fail, 'WifiWizard', 'startScan', []);
+    };
+
+    /**
      * Hands the list of scanned  networks to the `win` success callback function.
+     *
      * @param {callback}    win	    callback function that receives list of networks
      * @param {callback}    fail    error callback
      */
@@ -85,6 +96,54 @@ var WifiWizard = (function() {
         cordova.exec(win, fail, 'WifiWizard', 'getScanResults', []);
     };
 
+    /**
+     * Retrieves the currently connected SSID and passes it to `win`
+     *
+     * @param {callback}    win	    function to handle SSID name
+     * @param {callback}    fail    error callback
+     */
+    this.getCurrentSSID = function(win, fail) {
+        if (typeof win != "function") {
+            throw new Error("getCurrentSSID first parameter must be function to handle SSID");
+        }
+        cordova.exec(win, fail, 'WifiWizard', 'getConnectedSSID', []);
+    };
+
+    /**
+     * Enables the wifi adapter. Calls win if successful, calls fail
+     * otherwise.
+     *
+     * @param {callback}    win     success callback function
+     * @param {callback}    fail    error callback
+     */
+    this.enableWifi = function(win, fail) {
+        cordova.exec(win, fail, 'WifiWizard', 'setWifiEnabled', [true]); 
+    };
+
+    /**
+     * Disables the wifi adapater. Callls win if successful, calls fail
+     * otherwise.
+     *
+     * @param {callback}    win     success callback
+     * @param {callback}    fail    error callback
+     */
+    this.disableWifi = function(win, fail) {
+        cordova.exec(win, fail, 'WifiWizard', 'setWifiEnabled', [false]);
+    };
+
+    /**
+     * Passes `true` or `false` to win callback function.
+     *
+     * @param {callback}    win     success callback
+     * @param {callback}    fail    error callback
+     */
+    this.isWifiEnabled = function(win, fail) {
+        if (typeof win != "function") {
+            throw new Error("isWifiEnabled first parameter must be a function to handle wifi status.");
+        }
+        cordova.exec(function(result) { win(!!result); }, 
+                     fail, 'WifiWizard', 'isWifiEnabled', []);
+    };
     return {
 
         /**
@@ -132,18 +191,6 @@ var WifiWizard = (function() {
         },
 
 
-        /**
-         *  Start scanning wifi.
-         * @param 	win	callback function
-         * @param 	fail	callback function if error
-         */
-        startScan: function(win, fail) {
-            if (typeof win != "function") {
-                console.log("startScan first parameter must be a function to handle list.");
-                return;
-            }
-            cordova.exec(win, fail, 'WifiWizard', 'startScan', []);
-        },
 
         /**
          *  Disconnect current wifi.
@@ -158,48 +205,6 @@ var WifiWizard = (function() {
             cordova.exec(win, fail, 'WifiWizard', 'disconnect', []);
         },
 
-        /**
-         *  Gets the currently connected wifi SSID
-         * @param 	win	callback function
-         * @param 	fail	callback function if error
-         */
-        getCurrentSSID: function(win, fail) {
-            if (typeof win != "function") {
-                console.log("getCurrentSSID first parameter must be a function to handle SSID.");
-                return;
-            }
-            cordova.exec(win, fail, 'WifiWizard', 'getConnectedSSID', []);
-        },
-
-        /**
-         *  Gets 'true' or 'false' if WiFi is enabled or disabled
-         * @param 	win	callback function
-         * @param 	fail
-         */
-isWifiEnabled: function(win, fail) {
-                   if (typeof win != "function") {
-                       console.log("isWifiEnabled first parameter must be a function to handle wifi status.");
-                       return;
-                   }
-                   cordova.exec(function(result) {
-                           win(!!result);
-                           }, fail, 'WifiWizard', 'isWifiEnabled', []
-                           );
-               },
-
-        /**
-         *  Gets '1' if WiFi is enabled
-         * @param   enabled	callback function
-         * @param 	win	callback function
-         * @param 	fail	callback function if wifi is disabled
-         */
-        setWifiEnabled: function(enabled, win, fail) {
-            if (typeof win != "function") {
-                console.log("setWifiEnabled second parameter must be a function to handle enable result.");
-                return;
-            }
-            cordova.exec(win, fail, 'WifiWizard', 'setWifiEnabled', [enabled]);
-        }
     }
 })();
 
