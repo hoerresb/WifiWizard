@@ -18,6 +18,20 @@ var WifiWizard = (function() {
         cordova.exec(win, fail, 'WifiWizard', 'addNetwork', wifi.toArray());
     };
 
+    /**
+     * This method removes a given network from the list of configured networks.
+     * The network may be specified either as a string, in which case the
+     * string must be wrapped in double quotes, or as a WifiConfig object.
+     *
+     * @param {string|WifiConfig} network  network to remove 
+     * @param {callback}    win     success callback
+     * @param {callback}    fail    error callback
+     */
+    this.removeNetwork = function(network, win, fail) {
+        var remove = network instanceof WifiConfig ? network.ssid() : network;
+        cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', remove);
+    };
+
     return {
 
         /**
@@ -66,15 +80,6 @@ var WifiWizard = (function() {
 
 
 
-        /**
-         *	This method removes a given network from the list of configured networks.
-         *	@param	SSID	of the network to remove
-         *	@param	win		function to handle successful callback
-         *	@param	fail		function to handle error callback
-         */
-        removeNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [util.wrapInQuotes(SSID)]);
-        },
 
         /**
          *	This method connects a network if it is configured.
