@@ -14,7 +14,7 @@ function WifiAuth() {
             return self._algorithm;
         }
 
-        // todo: validate algorithm, set if ok
+        // TODO: validate algorithm, set if ok
     };
 
     this.toArray = function() {

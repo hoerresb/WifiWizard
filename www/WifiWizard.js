@@ -2,6 +2,14 @@ var WifiWizard = (function() {
     var WifiConfig = require('WifiConfig');
     var WifiAuth = require('WifiAuth');
 
+    /**
+     * This methods adds a network to the list of available networks.
+     * Currently, only WPA authentication and unauthenticated are supported.
+     *
+     * @param {WifiConfig}  wifi    WifiConfig object to add
+     * @param {callback}    win     Success callback
+     * @param {callback}    fail    Error callback
+     */
     this.addNetwork = function(wifi, win, fail) {
         if (wifi instanceof WifiConfig === false) {
             throw new Error("WifiConfig must be WifiConfig object");
@@ -57,17 +65,6 @@ var WifiWizard = (function() {
         },
 
 
-        /**
-         * this methods adds a network to the list of available networks.
-         * currently, only wpa authentication method is supported.
-         *
-         * @param 	wifi is json formatted information necessary for adding the wifi
-         * 			network, as is done in formatwificonfig.
-         * @param 	win is a callback function that gets called if the plugin is
-         * 			successful.
-         * @param 	fail is a callback function that gets called if the plugin gets
-         * 			an error
-         */
 
         /**
          *	This method removes a given network from the list of configured networks.
