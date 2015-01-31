@@ -7,25 +7,7 @@ var WifiWizard = (function() {
             throw new Error("WifiConfig must be WifiConfig object");
         }
 
-        var networkInformation = wifi.toArray();
-
-        switch (wifi.auth().algorithm()) {
-            case 'wpa':
-                networkInformation.push('wpa');
-                networkInformation.push(wifi.auth().psk());
-            break;
-            case 'none':
-                networkInformation.push('none');
-            break;
-            case 'newly supported type':
-                // push values in specific order, and implement new type in the java code.
-                break;
-            default:
-                console.log("wifiwizard: authentication invalid.");
-        }
-
-
-        cordova.exec(win, fail, 'WifiWizard', 'addNetwork', networkInformation);
+        cordova.exec(win, fail, 'WifiWizard', 'addNetwork', wifi.toArray());
     };
 
     return {

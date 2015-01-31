@@ -60,6 +60,8 @@ function WifiConfig(ssid, auth) {
     /**
      *  Converts the WifiConfig object into an array suitable for passing into
      *  the cordova.exec method.
+     *
+     *  @return {array} Array representation of WifiConfig
      */
     this.toArray = function() {
         return [self._ssid].concat(self._auth.toArray());
