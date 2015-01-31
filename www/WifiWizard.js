@@ -94,7 +94,7 @@ var WifiWizard = (function() {
          *	@param	fail		function to handle error callback
          */
         removeNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [util.formatSSID(SSID)]);
+            cordova.exec(win, fail, 'WifiWizard', 'removeNetwork', [util.wrapInQuotes(SSID)]);
         },
 
         /**
@@ -104,7 +104,7 @@ var WifiWizard = (function() {
          * @param	fail		function that is called to handle errors
          */
         connectNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [util.formatSSID(SSID)]);
+            cordova.exec(win, fail, 'WifiWizard', 'connectNetwork', [util.wrapInQuotes(SSID)]);
         },
 
         /**
@@ -114,7 +114,7 @@ var WifiWizard = (function() {
          * @param	fail		function that is called to handle errors
          */
         disconnectNetwork: function(SSID, win, fail) {
-            cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [util.formatSSID(SSID)]);
+            cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [util.wrapInQuotes(SSID)]);
 
         },
 

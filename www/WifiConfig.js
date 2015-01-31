@@ -18,7 +18,7 @@ function WifiConfig(ssid, auth) {
         }
 
         if( ssidIsValid(ssid) ) {
-            self._ssid = formatSSID(ssid);
+            self._ssid = wrapInQuotes(ssid);
         }
         else {
             throw new Error("SSID Invalid");
@@ -47,7 +47,7 @@ function WifiConfig(ssid, auth) {
      * Despite the name, this also needs to be done to WPA PSK.
      *	@param	ssid	the SSID to format
      */
-    function formatSSID(ssid) {
+    function wrapInQuotes(ssid) {
         if (ssid === undefined || ssid === null) {
             ssid = "";
         }
