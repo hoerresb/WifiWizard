@@ -1,7 +1,4 @@
-var WifiWizard = (function() {
-    var WifiConfig = require('WifiConfig');
-    var WifiAuth = require('WifiAuth');
-
+function WifiWizard() {
     /**
      * This methods adds a network to the list of available networks.
      * Currently, only WPA authentication and unauthenticated are supported.
@@ -57,7 +54,6 @@ var WifiWizard = (function() {
      */
     this.disableNetwork = function(network, win, fail) {
         var disable = network instanceof WifiConfig ? network.ssid() : network;
-        
         cordova.exec(win, fail, 'WifiWizard', 'disableNetwork', [disable]);
     };
 
@@ -146,68 +142,15 @@ var WifiWizard = (function() {
                      fail, 'WifiWizard', 'isWifiEnabled', []);
     };
 
-    return {
-
-        /**
-         * 	this method formats wifi information into an object for use with the
-         * 	addnetwork function. currently only supports
-         *		@param ssid			the ssid of the network enclosed in double quotes
-         *		@param password		the password for the network enclosed in double quotes
-         * 	@param algorithm	the authentication algorithm
-         * 	@return	wificonfig	a json object properly formatted for the plugin.
-         */
-        formatwificonfig: function(ssid, password, algorithm) {
-            var wificonfig = {
-                ssid: util.formatssid(ssid)
-      };
-            if (!algorithm && !password) {
-                // open network
-                wificonfig.auth = {
-                    algorithm: 'none'
-                };
-            } else if (algorithm === 'wpa') {
-                wificonfig.auth = {
-                    algorithm: algorithm,
-                    password : util.formatssid(password)
-                    // other parameters can be added depending on algorithm.
-                };
-            }
-            else if (algorithm === 'new network type') {
-                wificonfig.auth = {
-                    algorithm : algorithm
-                    // etc...
-                };
-            }
-            else {
-                console.log("algorithm incorrect")
-                return false;
-            }
-            return wificonfig;
-        },
-
-        /**
-         *	this method is a helper method that returns a wifi object with wpa.
-         */
-        formatwpaconfig: function(ssid, password) {
-            return wifiwizard.formatwificonfig(ssid, password, 'wpa');
-        },
-
-
-
-        /**
-         *  Disconnect current wifi.
-         * @param 	win	callback function
-         * @param 	fail	callback function if error
-         */
-        disconnect: function(win, fail) {
-            if (typeof win != "function") {
-                console.log("disconnect first parameter must be a function to handle list.");
-                return;
-            }
-            cordova.exec(win, fail, 'WifiWizard', 'disconnect', []);
-        },
-
-    }
-})();
+    /**
+     * Disconnects the currently connected wifi network.
+     *
+     * @param {callback}    win	    succes callback
+     * @param {callback}    fail    error callback
+     */
+    this.disconnect = function(win, fail) {
+        cordova.exec(win, fail, 'WifiWizard', 'disconnect', []);
+    };
+};
 
 module.exports = WifiWizard;

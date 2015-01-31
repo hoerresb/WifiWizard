@@ -264,11 +264,11 @@ public class WifiWizard extends CordovaPlugin {
     }
 
     /**
-     *    This method disconnects a network.
+     *    This method disabless a network.
      *
      *    @param    callbackContext        A Cordova callback context
-     *    @param    data                JSON Array, with [0] being SSID to connect
-     *    @return    true if network disconnected, false if failed
+     *    @param    data                JSON Array, with [0] being SSID to disable
+     *    @return    true if network disabled, false if failed
      */
     private boolean disableNetwork(CallbackContext callbackContext, JSONArray data) {
     Log.d(TAG, "WifiWizard: disableNetwork entered.");
@@ -277,10 +277,10 @@ public class WifiWizard extends CordovaPlugin {
             Log.d(TAG, "WifiWizard: disableNetwork invalid data");
             return false;
         }
-        String ssidToDisconnect = "";
+        String ssidToDisable = "";
         // TODO: Verify type of data here!
         try {
-            ssidToDisconnect = data.getString(0);
+            ssidToDisable = data.getString(0);
         }
         catch (Exception e) {
             callbackContext.error(e.getMessage());
@@ -288,16 +288,16 @@ public class WifiWizard extends CordovaPlugin {
             return false;
         }
 
-        int networkIdToDisconnect = ssidToNetworkId(ssidToDisconnect);
+        int networkIdToDisable = ssidToNetworkId(ssidToDisable);
 
-        if (networkIdToDisconnect > 0) {
-            wifiManager.disableNetwork(networkIdToDisconnect);
-            callbackContext.success("Network " + ssidToDisconnect + " disconnected!");
+        if (networkIdToDisable > 0) {
+            wifiManager.disableNetwork(networkIdToDisable);
+            callbackContext.success("Network " + ssidToDisable + " disabled!");
             return true;
         }
         else {
-            callbackContext.error("Network " + ssidToDisconnect + " not found!");
-            Log.d(TAG, "WifiWizard: Network not found to disconnect.");
+            callbackContext.error("Network " + ssidToDisable + " not found!");
+            Log.d(TAG, "WifiWizard: Network not found to disable.");
             return false;
         }
     }
@@ -309,12 +309,12 @@ public class WifiWizard extends CordovaPlugin {
      *    @return    true if network disconnected, false if failed
      */
     private boolean disconnect(CallbackContext callbackContext) {
-        Log.d(TAG, "WifiWizard: disconnect entered.");
+        // Log.d(TAG, "WifiWizard: disconnect entered.");
         if (wifiManager.disconnect()) {
-            callbackContext.success("Disconnected from current network");
+            callbackContext.success();
             return true;
         } else {
-            callbackContext.error("Unable to disconnect from the current network");
+            callbackContext.error();
             return false;
         }
     }

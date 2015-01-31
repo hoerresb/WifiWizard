@@ -5,8 +5,8 @@ function WifiAuth() {
     var self = this;
     
     var ALGS = {
-        NONE:   'none',
-        WPA:    'wpa'
+        NONE:   'NONE',
+        WPA:    'WPA'
     };
 
     this.algorithm = function(algorithm) {
@@ -14,6 +14,14 @@ function WifiAuth() {
             return self._algorithm;
         }
 
+        algorithm = algorithm.toUpperCase();
+        for (alg in ALGS) {
+            if (ALGS[alg] === algorithm) {
+                self._algorithm = algorithm;
+            }
+        }
+
+        throw new Error("Unsupported algorithm");
         // TODO: validate algorithm, set if ok
     };
 
