@@ -68,9 +68,21 @@ var WifiWizard = (function() {
      */
     this.listNetworks = function(win, fail) {
         if (typeof win != "function") {
-            throw new Error("listNetworks first parameter must be a function to handle list.");
+            throw new Error("listNetworks first parameter must be a function to handle array.");
         }
         cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
+    };
+
+    /**
+     * Hands the list of scanned  networks to the `win` success callback function.
+     * @param {callback}    win	    callback function that receives list of networks
+     * @param {callback}    fail    error callback
+     */
+    this.getScanResults = function(win, fail) {
+        if (typeof win != "function") {
+            throw new Error("getScanResults first parameter must be a function to handle array of scan results.");
+        }
+        cordova.exec(win, fail, 'WifiWizard', 'getScanResults', []);
     };
 
     return {
@@ -119,20 +131,6 @@ var WifiWizard = (function() {
             return wifiwizard.formatwificonfig(ssid, password, 'wpa');
         },
 
-
-        /**
-         *  Hands the list of scanned  networks to the `win` success callback function.
-         * @param 	win	callback function that receives list of networks
-         * @param 	fail	callback function if error
-         * @return		a list of networks
-         */
-        getScanResults: function(win, fail) {
-            if (typeof win != "function") {
-                console.log("getScanResults first parameter must be a function to handle list.");
-                return;
-            }
-            cordova.exec(win, fail, 'WifiWizard', 'getScanResults', []);
-        },
 
         /**
          *  Start scanning wifi.
