@@ -47,17 +47,18 @@ var WifiWizard = (function() {
     };
 
     /**
-     * This method disconnects a network if it has been configured. The network
+     * This method disables a network if it has been configured. The network
      * can be specified as a double quote wrapped string or as a WifiConfig
      * object.
      *
-     * @param {string|WifiConfig} network the network to disconnect
+     * @param {string|WifiConfig} network the network to disable
      * @param {callback}    win     success callback
      * @param {callback}    fail    error callback
      */
-    this.disconnect = function(network, win, fail) {
-        var disconnect = network instanceof WifiConfig ? network.ssid() : network;
-        cordova.exec(win, fail, 'WifiWizard', 'disconnectNetwork', [disconnect]);
+    this.disableNetwork = function(network, win, fail) {
+        var disable = network instanceof WifiConfig ? network.ssid() : network;
+        
+        cordova.exec(win, fail, 'WifiWizard', 'disableNetwork', [disable]);
     };
 
     /**
@@ -144,6 +145,7 @@ var WifiWizard = (function() {
         cordova.exec(function(result) { win(!!result); }, 
                      fail, 'WifiWizard', 'isWifiEnabled', []);
     };
+
     return {
 
         /**

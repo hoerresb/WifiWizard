@@ -21,7 +21,7 @@ public class WifiWizard extends CordovaPlugin {
     private static final String ADD_NETWORK = "addNetwork";
     private static final String REMOVE_NETWORK = "removeNetwork";
     private static final String CONNECT_NETWORK = "connectNetwork";
-    private static final String DISCONNECT_NETWORK = "disconnectNetwork";
+    private static final String DISABLE_NETWORK = "disableNetwork";
     private static final String DISCONNECT = "disconnect";
     private static final String LIST_NETWORKS = "listNetworks";
     private static final String START_SCAN = "startScan";
@@ -65,8 +65,8 @@ public class WifiWizard extends CordovaPlugin {
         else if(action.equals(CONNECT_NETWORK)) {
             return this.connectNetwork(callbackContext, data);
         }
-        else if(action.equals(DISCONNECT_NETWORK)) {
-            return this.disconnectNetwork(callbackContext, data);
+        else if(action.equals(DISABLE_NETWORK)) {
+            return this.disableNetwork(callbackContext, data);
         }
         else if(action.equals(LIST_NETWORKS)) {
             return this.listNetworks(callbackContext);
@@ -270,11 +270,11 @@ public class WifiWizard extends CordovaPlugin {
      *    @param    data                JSON Array, with [0] being SSID to connect
      *    @return    true if network disconnected, false if failed
      */
-    private boolean disconnectNetwork(CallbackContext callbackContext, JSONArray data) {
-    Log.d(TAG, "WifiWizard: disconnectNetwork entered.");
+    private boolean disableNetwork(CallbackContext callbackContext, JSONArray data) {
+    Log.d(TAG, "WifiWizard: disableNetwork entered.");
         if(!validateData(data)) {
-            callbackContext.error("WifiWizard: disconnectNetwork invalid data");
-            Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
+            callbackContext.error("WifiWizard: disableNetwork invalid data");
+            Log.d(TAG, "WifiWizard: disableNetwork invalid data");
             return false;
         }
         String ssidToDisconnect = "";
@@ -455,8 +455,8 @@ public class WifiWizard extends CordovaPlugin {
      */
     private boolean setWifiEnabled(CallbackContext callbackContext, JSONArray data) {
         if(!validateData(data)) {
-            callbackContext.error("WifiWizard: disconnectNetwork invalid data");
-            Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
+            callbackContext.error("WifiWizard: disableNetwork invalid data");
+            Log.d(TAG, "WifiWizard: disableNetwork invalid data");
             return false;
         }
         
