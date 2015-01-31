@@ -1,12 +1,22 @@
-function WifiAuth() {
-    var _algorithm;
-    var _psk;
+/**
+ * WifiAuth contains information required to authenticate to a Wifi network.
+ * Currently, the supported algorithms are WPA and none. For a simple network
+ * that only requires a PSK, the config parameter can simply be a password (WPA
+ * requires that password is wrapped in double quotes). With more complex
+ * network types, config can be an object specifying other parameters.
+ *
+ * @param {string}  algorithm       string value of algorithm
+ * @param {string|object} config    PSK or configuration options
+ */
+function WifiAuth(algorithm, config) {
+    var _algorithm = "";
+    var _config = {};
 
     var self = this;
     
     var ALGS = {
-        NONE:   'NONE',
-        WPA:    'WPA'
+        NONE: "NONE",
+        WPA: "WPA"
     };
 
     this.algorithm = function(algorithm) {
@@ -15,15 +25,34 @@ function WifiAuth() {
         }
 
         algorithm = algorithm.toUpperCase();
-        for (alg in ALGS) {
-            if (ALGS[alg] === algorithm) {
+
+        switch (algorithm) {
+            case "WPA":
                 self._algorithm = algorithm;
-            }
+            break;
+            case "NONE":
+                self._algorithm = algorithm;
+            break;
+            default:
+                throw new Error("Unsupported authentication algorithm.");
+            break;
         }
 
-        throw new Error("Unsupported algorithm");
-        // TODO: validate algorithm, set if ok
+        return this;
     };
+
+    this.config = function(config) {
+        switch(self._algorithm) {
+            case "WPA":
+                return configWPA(config);
+            break;
+        }
+    };
+    
+    function configWPA(config) {
+        self._config.psk = config
+        return this;
+    }
 
     this.toArray = function() {
         var result = [];
