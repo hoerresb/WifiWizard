@@ -12,6 +12,14 @@ function WifiConfig(ssid, auth) {
 
     var WifiAuth = require('WifiAuth');
 
+    /**
+     *  Either returns the SSID of the WifiConfig object if the paramater is
+     *  undefined. If the parameter is defined, it checks to see if it is a
+     *  valid SSID. If so, it updates the SSID. Otherwise, it throws an error.
+     *
+     *  @param  {string}    ssid    String to set SSID
+     *  @return this
+     */
     this.ssid = function(ssid) {
         if (ssid === undefined) {
             return self._ssid;
@@ -27,6 +35,14 @@ function WifiConfig(ssid, auth) {
         return this;
     };
 
+    /**
+     *  Can be used to get a copy of the authentication object or set the
+     *  authentication object if a parameter is passed. Verifies the type of 
+     *  the auth object, and if invalid, will throw an error.
+     *
+     *  @param  {WifiAuth}  auth    
+     *  @return this
+     */
     this.auth = function(auth) {
         if (auth === undefined) {
             return self._auth; // TODO: Clone object instead of returning reference
@@ -42,26 +58,35 @@ function WifiConfig(ssid, auth) {
     };
 
     /**
-     *	This method formats a given SSID and ensures that it is appropriate.
-     *	If the SSID is not wrapped in double quotes, it wraps it in double quotes.
-     * Despite the name, this also needs to be done to WPA PSK.
-     *	@param	ssid	the SSID to format
+     *  Converts the WifiConfig object into an array suitable for passing into
+     *  the cordova.exec method.
      */
-    function wrapInQuotes(ssid) {
-        if (ssid === undefined || ssid === null) {
-            ssid = "";
-        }
-        ssid = ssid.trim();
+    this.toArray = function() {
+        return [self._ssid].concat(self._auth.toArray());
+    };
 
-        if (ssid.charAt(0) != '"' ) {
-            ssid = '"' + ssid;
+    /**
+     *  This method ensures that a string is wrapped in double quotes. This is
+     *  required for SSID and WPA PSK.
+     *
+     *  @param  {string}    string  variable to wrap
+     *  @return {string}    string wrapped in quotes
+     */
+    function wrapInQuotes(string) {
+        if (string === undefined || string === null) {
+            string = "";
+        }
+        string = string.trim();
+
+        if (string.charAt(0) != '"' ) {
+            string = '"' + string;
         }
 
-        if (ssid.charAt(ssid.length-1) != '"' ) {
-            ssid = ssid + '"';
+        if (string.charAt(string.length-1) != '"' ) {
+            string = string + '"';
         }
 
-        return ssid;
+        return string;
     }
 
     function ssidIsValid(ssid) {
