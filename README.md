@@ -4,8 +4,6 @@ Version 0.2.8
 
 This Phonegap plugin enables WiFi management from within Phonegap applications.
 
-Only Android is in development at this time. iOS is planned to be developed, with other platforms following.
-
 ### Installation
 
 Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git`
@@ -68,6 +66,10 @@ Retrieves the current wifi status and passes `true` or `false` to the handler.
 Set wifi status. `enabled` is a Boolean type, so to disable the Wifi, you'd execute `WifiWizard.setWifiEnabled(false);`
 
 ### Changelog:
+
+#### v0.2.9
+
+`isWifiEnabled` bug fixed. `level` in `getScanResults` object now refers to raw RSSI value while `signalBars` returns the old 0-5 number.
 
 #### v0.2.8
 
