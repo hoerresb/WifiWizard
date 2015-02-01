@@ -60,7 +60,7 @@ function WifiAuth(algorithm, config) {
         
         switch (self._algorithm) {
             case ALGS.WPA:
-                result.push(self._psk);
+                result.push(self._config.psk);
             break;
             case ALGS.NONE:
             break;
