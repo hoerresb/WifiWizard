@@ -6,7 +6,13 @@ This Phonegap plugin enables WiFi management from within Phonegap applications.
 
 ### Installation
 
-Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git`
+#### Master
+
+Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git`. Please note that the plugin is in active development, and this will pull the most recent commits.
+
+#### Releases
+
+Run `cordova plugin add com.pylonproducts.wifiwizard`. This will get the latest release of the plugin.
 
 ### Usage from within Cordova/Phonegap:
 
