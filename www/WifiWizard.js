@@ -188,18 +188,26 @@ var WifiWizard = {
         cordova.exec(win, fail, 'WifiWizard', 'listNetworks', []);
     },
 
-    /**
-     *  Hands the list of scanned  networks to the `win` success callback function.
-     * @param 	win	callback function that receives list of networks
-     * @param 	fail	callback function if error
-     * @return		a list of networks
-     */
-    getScanResults: function(win, fail) {
+	/**
+	 *  Hands the list of scanned  networks to the `win` success callback function.
+         * @param   opts optional json object of options
+	 * @param 	win	callback function that receives list of networks
+	 * @param 	fail	callback function if error
+	 * @return		a list of networks
+	 */
+    getScanResults: function(options, win, fail) {
+        if (typeof options === 'function') {
+            fail = win;
+            win = options;
+            options = {};
+        }
+
         if (typeof win != "function") {
             console.log("getScanResults first parameter must be a function to handle list.");
             return;
         }
-        cordova.exec(win, fail, 'WifiWizard', 'getScanResults', []);
+
+        cordova.exec(win, fail, 'WifiWizard', 'getScanResults', [options]);
     },
 
     /**
