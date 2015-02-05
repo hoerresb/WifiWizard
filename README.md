@@ -65,7 +65,7 @@ An options object may be passed. Currently, the only supported option is `numLev
 - if `(n > 1)`, `*.getScanResults({numLevels: n})` will calculate the signal level, split in n levels;
 - if `(n == false)`, `*.getScanResults({numLevels: n})` will use the raw signal level;
 
-#### `WifiWizard.getConnectedSSID(ssidHandler, fail);` 
+#### `WifiWizard.getCurrentSSID(ssidHandler, fail);` 
 
 Retrieves the current SSID and passes it to ssidHandler.
 
