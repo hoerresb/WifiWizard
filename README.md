@@ -4,6 +4,8 @@ Version 0.2.8
 
 This Phonegap plugin enables WiFi management from within Phonegap applications.
 
+Currently, iOS only has limited functionality. Most functionality is only available on Android.
+
 ### Installation
 
 #### Master
