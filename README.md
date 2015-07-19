@@ -58,6 +58,9 @@ Retrieves a list of the available networks as an array of objects and passes the
         {   "level": signal_level, // raw RSSI value
             "SSID": ssid, // SSID as string, with escaped double quotes: "\"ssid name\""
             "BSSID": bssid // MAC address of WiFi router as string
+            "frequency": frequency of the access point channel in MHz
+            "capabilities": capabilities // Describes the authentication, key management, and encryption schemes supported by the access point.
+            "timestamp": timestamp in microseconds (since boot) when this result was last seen.
         }
     ]
 
