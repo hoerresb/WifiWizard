@@ -4,7 +4,7 @@ Version 0.2.8
 
 This Phonegap plugin enables WiFi management from within Phonegap applications.
 
-Currently, iOS only has limited functionality. Most functionality is only available on Android.
+iOS has limited functionality, as Apple's WifiManager equivalent is only available as a private API. Any app that used these features would not be allowed on the app store. The only function availabe for iOS is `getCurrentSSID`.
 
 ### Installation
 
