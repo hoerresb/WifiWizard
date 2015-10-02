@@ -104,7 +104,7 @@
                                 callbackId:command.callbackId];
 }
 
-- (void)getConnectedSSID:(CDVInvokedUrlCommand*)command {
+- (void)getConnectedBSSID:(CDVInvokedUrlCommand*)command {
     CDVPluginResult *pluginResult = nil;
     NSDictionary *r = [self fetchSSIDInfo];
     
