@@ -80,7 +80,7 @@ Retrieves the current wifi status and passes `true` or `false` to the handler.
 
 #### `WifiWizard.setWifiEnabled(enabled, win, fail);` 
 
-Set wifi status. `enabled` is a Boolean type, so to disable the Wifi, you'd execute `WifiWizard.setWifiEnabled(false);`
+Set wifi status. `enabled` is a Boolean type, so to disable the Wifi, you'd execute `WifiWizard.setWifiEnabled(false, win, fail);`
 
 ### Changelog:
 
