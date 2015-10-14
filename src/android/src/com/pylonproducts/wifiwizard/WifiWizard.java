@@ -15,12 +15,15 @@
 package com.pylonproducts.wifiwizard;
 
 import org.apache.cordova.*;
+
+import java.lang.InterruptedException;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiEnterpriseConfig;
@@ -268,8 +271,39 @@ public class WifiWizard extends CordovaPlugin {
             // a disconnect(), this will not reconnect.
             wifiManager.disableNetwork(networkIdToConnect);
             wifiManager.enableNetwork(networkIdToConnect, true);
-            callbackContext.success("Network " + ssidToConnect + " connected!");
-            return true;
+
+            final int TIMES_TO_RETRY = 30;
+            for(int i = 0; i < TIMES_TO_RETRY; i++) {
+                WifiInfo info = wifiManager.getConnectionInfo();
+                NetworkInfo.DetailedState connectionState = info.getDetailedStateOf(info.getSupplicantState());
+
+                boolean isConnected =
+                        // need to ensure we're on correct network because sometimes this code is
+                        // reached before the initial network has disconnected
+                        info.getNetworkId() == networkIdToConnect && (
+                                connectionState == NetworkInfo.DetailedState.CONNECTED ||
+                                // Android seems to sometimes get stuck in OBTAINING_IPADDR after it has received one
+                                (connectionState == NetworkInfo.DetailedState.OBTAINING_IPADDR && info.getIpAddress() != 0)
+                        );
+                if (isConnected) {
+                    callbackContext.success("Network " + ssidToConnect + " connected!");
+                    return true;
+                }
+
+                Log.d(TAG, "WifiWizard: Got " + connectionState.name() + " on " + (i + 1) + " out of " + TIMES_TO_RETRY);
+                final int ONE_SECOND = 1000;
+                try {
+                    Thread.sleep(ONE_SECOND);
+                }
+                catch (InterruptedException e) {
+                    Log.e(TAG, e.getMessage());
+                    callbackContext.error("Received InterruptedException while connecting");
+                    return false;
+                }
+            }
+            callbackContext.error("Network " + ssidToConnect + " failed to finish connecting within the timeout");
+            Log.d(TAG, "WifiWizard: Network failed to finish connecting within the timeout");
+            return false;
         }
         else {
             callbackContext.error("Network " + ssidToConnect + " not found!");
