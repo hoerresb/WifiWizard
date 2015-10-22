@@ -365,59 +365,18 @@ public class WifiWizard extends CordovaPlugin {
        *    @param    data                   JSONArray with [0] == JSONObject
        *    @return    true
        */
-    private boolean getScanResults(CallbackContext callbackContext, JSONArray data) {
+    private boolean getScanResults(CallbackContext callbackContext) {
         List<ScanResult> scanResults = wifiManager.getScanResults();
 
         JSONArray returnList = new JSONArray();
 
-        Integer numLevels = null;
-
-        if (!data.isNull(0)) {
-            try {
-                JSONObject options = data.getJSONObject(0);
-
-                if (options.has("numLevels")) {
-                    Integer levels = options.optInt("numLevels");
-
-                    if (levels > 0) {
-                        numLevels = levels;
-                    } else if (options.optBoolean("numLevels", false)) {
-                        // use previous default for {numLevels: true}
-                        numLevels = 5;
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
         for (ScanResult scan : scanResults) {
-            /*
-             * @todo - breaking change, remove this notice when tidying new release and explain changes, e.g.:
-             *   0.y.z includes a breaking change to WifiWizard.getScanResults().
-             *   Earlier versions set scans' level attributes to a number derived from wifiManager.calculateSignalLevel.
-             *   This update returns scans' raw RSSI value as the level, per Android spec / APIs.
-             *   If your application depends on the previous behaviour, we have added an options object that will modify behaviour:
-             *   - if `(n == true || n < 2)`, `*.getScanResults({numLevels: n})` will return data as before, split in 5 levels;
-             *   - if `(n > 1)`, `*.getScanResults({numLevels: n})` will calculate the signal level, split in n levels;
-             *   - if `(n == false)`, `*.getScanResults({numLevels: n})` will use the raw signal level;
-             */
-
-            int level;
-
-            if (numLevels == null) {
-              level = scan.level;
-            } else {
-              level = wifiManager.calculateSignalLevel(scan.level, numLevels);
-            }
 
             JSONObject lvl = new JSONObject();
             try {
                 lvl.put("level", level);
                 lvl.put("SSID", scan.SSID);
                 lvl.put("BSSID", scan.BSSID);
-                lvl.put("frequency", scan.frequency);
-                lvl.put("capabilities", scan.capabilities);
                 returnList.put(lvl);
             } catch (JSONException e) {
                 e.printStackTrace();
