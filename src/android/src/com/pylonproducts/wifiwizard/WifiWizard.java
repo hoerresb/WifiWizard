@@ -89,7 +89,7 @@ public class WifiWizard extends CordovaPlugin {
             return this.startScan(callbackContext);
         }
         else if(action.equals(GET_SCAN_RESULTS)) {
-            return this.getScanResults(callbackContext, data);
+            return this.getScanResults(callbackContext);
         }
         else if(action.equals(DISCONNECT)) {
             return this.disconnect(callbackContext);
