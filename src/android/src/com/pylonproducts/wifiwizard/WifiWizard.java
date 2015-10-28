@@ -244,38 +244,69 @@ public class WifiWizard extends CordovaPlugin {
      *    @return    true if network connected, false if failed
      */
     private boolean connectNetwork(CallbackContext callbackContext, JSONArray data) {
-        Log.d(TAG, "WifiWizard: connectNetwork entered.");
-        if(!validateData(data)) {
-            callbackContext.error("WifiWizard: connectNetwork invalid data");
-            Log.d(TAG, "WifiWizard: connectNetwork invalid data.");
-            return false;
-        }
-        String ssidToConnect = "";
+      Log.d(TAG, "WifiWizard: connectNetwork entered.");
+      if(!validateData(data)) {
+          callbackContext.error("WifiWizard: connectNetwork invalid data");
+          Log.d(TAG, "WifiWizard: connectNetwork invalid data.");
+          return false;
+      }
+      String ssidToConnect = "";
 
-        try {
-            ssidToConnect = data.getString(0);
-        }
-        catch (Exception e) {
-            callbackContext.error(e.getMessage());
-            Log.d(TAG, e.getMessage());
-            return false;
-        }
+      try {
+          ssidToConnect = data.getString(0);
+      }
+      catch (Exception e) {
+          callbackContext.error(e.getMessage());
+          Log.d(TAG, e.getMessage());
+          return false;
+      }
 
-        int networkIdToConnect = ssidToNetworkId(ssidToConnect);
+      int networkIdToConnect = ssidToNetworkId(ssidToConnect);
 
-        if (networkIdToConnect >= 0) {
-            // We disable the network before connecting, because if this was the last connection before
-            // a disconnect(), this will not reconnect.
-            wifiManager.disableNetwork(networkIdToConnect);
-            wifiManager.enableNetwork(networkIdToConnect, true);
-            callbackContext.success("Network " + ssidToConnect + " connected!");
-            return true;
-        }
-        else {
-            callbackContext.error("Network " + ssidToConnect + " not found!");
-            Log.d(TAG, "WifiWizard: Network not found to connect.");
-            return false;
-        }
+      if (networkIdToConnect >= 0) {
+          // We disable the network before connecting, because if this was the last connection before
+          // a disconnect(), this will not reconnect.
+          wifiManager.disableNetwork(networkIdToConnect);
+          wifiManager.enableNetwork(networkIdToConnect, true);
+
+          final int TIMES_TO_RETRY = 30;
+          for(int i = 0; i < TIMES_TO_RETRY; i++) {
+              WifiInfo info = wifiManager.getConnectionInfo();
+              NetworkInfo.DetailedState connectionState = info.getDetailedStateOf(info.getSupplicantState());
+
+              boolean isConnected =
+                      // need to ensure we're on correct network because sometimes this code is
+                      // reached before the initial network has disconnected
+                      info.getNetworkId() == networkIdToConnect && (
+                              connectionState == NetworkInfo.DetailedState.CONNECTED ||
+                              // Android seems to sometimes get stuck in OBTAINING_IPADDR after it has received one
+                              (connectionState == NetworkInfo.DetailedState.OBTAINING_IPADDR && info.getIpAddress() != 0)
+                      );
+              if (isConnected) {
+                  callbackContext.success("Network " + ssidToConnect + " connected!");
+                  return true;
+              }
+
+              Log.d(TAG, "WifiWizard: Got " + connectionState.name() + " on " + (i + 1) + " out of " + TIMES_TO_RETRY);
+              final int ONE_SECOND = 1000;
+              try {
+                  Thread.sleep(ONE_SECOND);
+              }
+              catch (InterruptedException e) {
+                  Log.e(TAG, e.getMessage());
+                  callbackContext.error("Received InterruptedException while connecting");
+                  return false;
+              }
+          }
+          callbackContext.error("Network " + ssidToConnect + " failed to finish connecting within the timeout");
+          Log.d(TAG, "WifiWizard: Network failed to finish connecting within the timeout");
+          return false;
+      }
+      else {
+          callbackContext.error("Network " + ssidToConnect + " not found!");
+          Log.d(TAG, "WifiWizard: Network not found to connect.");
+          return false;
+      }
     }
 
     /**

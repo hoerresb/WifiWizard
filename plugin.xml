@@ -21,6 +21,7 @@
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 			<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+			<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 		</config-file>
 
 		<config-file target="res/xml/config.xml" parent="/*">
