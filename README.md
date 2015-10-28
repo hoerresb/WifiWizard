@@ -1,5 +1,13 @@
 # WifiWizard
 
+Version 0.2.10
+
+'getCurrentBSSID' now available on IOS.
+
+Fixed callback issue with 'connectNetwork'. It now checks to make sure you are connected to the specific network before returning.
+
+Updated permissions for Android Marshmallow.
+
 Version 0.2.9
 
 This Phonegap plugin enables WiFi management from within Phonegap applications.
