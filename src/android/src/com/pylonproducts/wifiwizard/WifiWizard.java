@@ -278,7 +278,7 @@ public class WifiWizard extends CordovaPlugin {
             return true;
 
         }else{
-            callbackContext.error("error");
+            callbackContext.error("WifiWizard: cannot connect to network");
             return false;
         }
     }
@@ -377,7 +377,11 @@ public class WifiWizard extends CordovaPlugin {
 
         Integer numLevels = null;
 
-        if (!data.isNull(0)) {
+        if(!validateData(data)) {
+            callbackContext.error("WifiWizard: disconnectNetwork invalid data");
+            Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
+            return false;
+        }else if (!data.isNull(0)) {
             try {
                 JSONObject options = data.getJSONObject(0);
 
