@@ -274,7 +274,8 @@ public class WifiWizard extends CordovaPlugin {
             SupplicantState supState;
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             supState = wifiInfo.getSupplicantState();
-            callbackContext.success(supState);
+            supState.
+            callbackContext.success(getSupplicantState(supState));
             return true;
 
         }else{
