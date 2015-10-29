@@ -4,7 +4,7 @@ Version 0.2.10
 
 `getCurrentBSSID` now available on IOS.
 
-Fixed callback issue with `connectNetwork`. It now checks to make sure you are connected to the specific network before returning.
+Fixed callback issue with `connectNetwork`.
 
 Updated permissions for Android Marshmallow.
 
