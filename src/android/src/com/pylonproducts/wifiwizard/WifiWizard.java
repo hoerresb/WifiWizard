@@ -277,7 +277,7 @@ public class WifiWizard extends CordovaPlugin {
             return true;
 
         }else{
-            callbackContext.error('error');
+            callbackContext.error("error");
             return false;
         }
     }
