@@ -16,11 +16,16 @@ package com.pylonproducts.wifiwizard;
 
 import org.apache.cordova.*;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiConfiguration;
@@ -28,7 +33,6 @@ import android.net.wifi.WifiEnterpriseConfig;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.SupplicantState;
-import android.content.Context;
 import android.util.Log;
 
 
@@ -42,6 +46,7 @@ public class WifiWizard extends CordovaPlugin {
     private static final String LIST_NETWORKS = "listNetworks";
     private static final String START_SCAN = "startScan";
     private static final String GET_SCAN_RESULTS = "getScanResults";
+    private static final String SCAN = "scan";
     private static final String GET_CONNECTED_SSID = "getConnectedSSID";
     private static final String IS_WIFI_ENABLED = "isWifiEnabled";
     private static final String SET_WIFI_ENABLED = "setWifiEnabled";
@@ -92,6 +97,9 @@ public class WifiWizard extends CordovaPlugin {
         }
         else if(action.equals(GET_SCAN_RESULTS)) {
             return this.getScanResults(callbackContext, data);
+        }
+        else if(action.equals(SCAN)) {
+            return this.scan(callbackContext, data);
         }
         else if(action.equals(DISCONNECT)) {
             return this.disconnect(callbackContext);
@@ -457,6 +465,76 @@ public class WifiWizard extends CordovaPlugin {
             callbackContext.error("Scan failed");
             return false;
         }
+    }
+
+    private class ScanSyncContext {
+        public boolean finished = false;
+    }
+
+    /**
+     * Scans networks and sends the list back on the success callback
+     * @param callbackContext   A Cordova callback context
+     * @param data  JSONArray with [0] == JSONObject
+     * @return true
+     */
+    private boolean scan(final CallbackContext callbackContext, final JSONArray data) {
+        Log.v(TAG, "Entering startScan");
+        final ScanSyncContext syncContext = new ScanSyncContext();
+
+        final BroadcastReceiver receiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                Log.v(TAG, "Entering onReceive");
+                synchronized (syncContext) {
+                    if (syncContext.finished) {
+                        Log.v(TAG, "In onReceive, already finished");
+                        return;
+                    }
+                    syncContext.finished = true;
+                    context.unregisterReceiver(this);
+                }
+                Log.v(TAG, "In onReceive, success");
+                getScanResults(callbackContext, data);
+            }
+        };
+
+        final Context context = cordova.getActivity().getApplicationContext();
+
+        Log.v(TAG, "Submitting timeout to threadpool");
+        cordova.getThreadPool().submit(new Runnable() {
+            public void run() {
+                Log.v(TAG, "Entering timeout");
+                final int TEN_SECONDS = 10000;
+                try {
+                    Thread.sleep(TEN_SECONDS);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Received InterruptedException e, " + e);
+                    // keep going into error
+                }
+                Log.v(TAG, "Thread sleep done");
+                synchronized (syncContext) {
+                    if (syncContext.finished) {
+                        Log.v(TAG, "In timeout, already finished");
+                        return;
+                    }
+                    syncContext.finished = true;
+                    context.unregisterReceiver(receiver);
+                }
+                Log.v(TAG, "In timeout, error");
+                callbackContext.error("Timed out waiting for scan to complete");
+            }
+        });
+
+        Log.v(TAG, "Registering broadcastReceiver");
+        context.registerReceiver(
+                receiver,
+                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        );
+
+        if (!wifiManager.startScan()) {
+            callbackContext.error("Scan failed");
+        }
+        Log.v(TAG, "Starting wifi scan");
+        return true;
     }
 
     /**

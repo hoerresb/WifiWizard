@@ -224,6 +224,26 @@ var WifiWizard = {
     },
 
     /**
+     * Scan WiFi networks and return results
+     * @param win callback function
+     * @param fail callback function if error
+     */
+    scan: function(options, win, fail) {
+        if (typeof options === 'function') {
+            fail = win;
+            win = options;
+            options = {};
+        }
+
+        if (typeof win != 'function' ) {
+            console.log("scan first parameters must be a function to handle list.");
+            return;
+        }
+
+        cordova.exec(win, fail, 'WifiWizard', 'scan', [options]);
+    },
+
+    /**
      *  Disconnect current wifi.
      * @param 	win	callback function
      * @param 	fail	callback function if error

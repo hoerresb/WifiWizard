@@ -9,6 +9,7 @@
 - (void)listNetworks:(CDVInvokedUrlCommand*)command;
 - (void)getScanResults:(CDVInvokedUrlCommand*)command;
 - (void)startScan:(CDVInvokedUrlCommand*)command;
+- (void)scan:(CDVInvokedUrlCommand*)command;
 - (void)disconnect:(CDVInvokedUrlCommand*)command;
 - (void)getConnectedSSID:(CDVInvokedUrlCommand*)command;
 - (void)getConnectedBSSID:(CDVInvokedUrlCommand*)command;
