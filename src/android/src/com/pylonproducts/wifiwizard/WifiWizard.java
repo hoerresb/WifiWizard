@@ -516,6 +516,7 @@ public class WifiWizard extends CordovaPlugin {
         for (WifiConfiguration test : currentNetworks) {
             if ( test.SSID.equals(ssid) ) {
                 networkId = test.networkId;
+                break;
             }
         }
 
