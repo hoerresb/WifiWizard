@@ -21,11 +21,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiEnterpriseConfig;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
+import android.net.wifi.SupplicantState;
 import android.content.Context;
 import android.util.Log;
 
@@ -141,6 +143,7 @@ public class WifiWizard extends CordovaPlugin {
                 wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
                 wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
                 wifi.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+                wifi.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
 
                 wifi.networkId = ssidToNetworkId(newSSID);
 
@@ -267,12 +270,15 @@ public class WifiWizard extends CordovaPlugin {
             // a disconnect(), this will not reconnect.
             wifiManager.disableNetwork(networkIdToConnect);
             wifiManager.enableNetwork(networkIdToConnect, true);
-            callbackContext.success("Network " + ssidToConnect + " connected!");
+
+            SupplicantState supState;
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            supState = wifiInfo.getSupplicantState();
+            callbackContext.success(supState.toString());
             return true;
-        }
-        else {
-            callbackContext.error("Network " + ssidToConnect + " not found!");
-            Log.d(TAG, "WifiWizard: Network not found to connect.");
+
+        }else{
+            callbackContext.error("WifiWizard: cannot connect to network");
             return false;
         }
     }
@@ -371,7 +377,11 @@ public class WifiWizard extends CordovaPlugin {
 
         Integer numLevels = null;
 
-        if (!data.isNull(0)) {
+        if(!validateData(data)) {
+            callbackContext.error("WifiWizard: disconnectNetwork invalid data");
+            Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
+            return false;
+        }else if (!data.isNull(0)) {
             try {
                 JSONObject options = data.getJSONObject(0);
 
@@ -387,6 +397,8 @@ public class WifiWizard extends CordovaPlugin {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                callbackContext.error(e.toString());
+                return false;
             }
         }
 
@@ -417,10 +429,12 @@ public class WifiWizard extends CordovaPlugin {
                 lvl.put("BSSID", scan.BSSID);
                 lvl.put("frequency", scan.frequency);
                 lvl.put("capabilities", scan.capabilities);
-                lvl.put("timestamp", scan.timestamp);
+               // lvl.put("timestamp", scan.timestamp);
                 returnList.put(lvl);
             } catch (JSONException e) {
                 e.printStackTrace();
+                callbackContext.error(e.toString());
+                return false;
             }
         }
 

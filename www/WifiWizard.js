@@ -248,6 +248,14 @@ var WifiWizard = {
         }
         cordova.exec(win, fail, 'WifiWizard', 'getConnectedSSID', []);
     },
+    
+    getCurrentBSSID: function(win, fail) {
+        if (typeof win != "function") {
+            console.log("getCurrentSSID first parameter must be a function to handle SSID.");
+            return;
+        }
+        cordova.exec(win, fail, 'WifiWizard', 'getConnectedBSSID', []);
+    },
 
     /**
      *  Gets 'true' or 'false' if WiFi is enabled or disabled

@@ -1,6 +1,14 @@
 # WifiWizard
 
-Version 0.2.8
+Version 0.2.10
+
+`getCurrentBSSID` now available on IOS.
+
+~~Fixed callback issue with `connectNetwork`.~~
+
+Updated permissions for Android Marshmallow.
+
+Version 0.2.9
 
 This Phonegap plugin enables WiFi management from within Phonegap applications.
 
@@ -14,7 +22,7 @@ Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git`. Ple
 
 #### Releases
 
-Run `cordova plugin add com.pylonproducts.wifiwizard`. This will get the latest release of the plugin.
+Run `cordova plugin add wifiwizard`. This will get the latest release of the plugin.
 
 ### Usage from within Cordova/Phonegap:
 
@@ -36,7 +44,7 @@ Removes the network with the given SSID. As above, `win` and `fail` are callback
 
 #### `WifiWizard.connectNetwork(SSID, win, fail);` 
 
-Connects the phone to the given Wifi network.
+Connects the phone to the given Wifi network. Returns the value of the Supplicant State.
 
 #### `WifiWizard.disconnectNetwork(SSID, win, fail);` 
 
@@ -60,7 +68,6 @@ Retrieves a list of the available networks as an array of objects and passes the
             "BSSID": bssid // MAC address of WiFi router as string
             "frequency": frequency of the access point channel in MHz
             "capabilities": capabilities // Describes the authentication, key management, and encryption schemes supported by the access point.
-            "timestamp": timestamp in microseconds (since boot) when this result was last seen.
         }
     ]
 
@@ -80,7 +87,7 @@ Retrieves the current wifi status and passes `true` or `false` to the handler.
 
 #### `WifiWizard.setWifiEnabled(enabled, win, fail);` 
 
-Set wifi status. `enabled` is a Boolean type, so to disable the Wifi, you'd execute `WifiWizard.setWifiEnabled(false);`
+Set wifi status. `enabled` is a Boolean type, so to disable the Wifi, you'd execute `WifiWizard.setWifiEnabled(false, win, fail);`
 
 ### Changelog:
 
