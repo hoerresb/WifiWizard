@@ -107,6 +107,32 @@ public class WifiWizard extends CordovaPlugin {
     }
 
     /**
+    * WEP has two kinds of password, a hex value that specifies the key or
+    * a character string used to generate the real hex. This checks what kind of
+    * password has been supplied. The checks correspond to WEP40, WEP104 & WEP232
+    * @param s
+    * @return
+    */
+    private static boolean getHexKey(String s) {
+        if (s == null) {
+            return false;
+        }
+
+        int len = s.length();
+        if (len != 10 && len != 26 && len != 58) {
+            return false;
+        }
+
+        for (int i = 0; i < len; ++i) {
+            char c = s.charAt(i);
+            if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * This methods adds a network to the list of available WiFi networks.
      * If the network already exists, then it updates it.
      *
@@ -160,10 +186,49 @@ public class WifiWizard extends CordovaPlugin {
                 return true;
             }
             else if (authType.equals("WEP")) {
-                // TODO: connect/configure for WEP
-                Log.d(TAG, "WEP unsupported.");
-                callbackContext.error("WEP unsupported");
-                return false;
+                // WEP Data format:
+                // 0: ssid
+                // 1: auth
+                // 2: password
+                String newSSID = data.getString(0);
+                wifi.SSID = newSSID;
+                String newPass = data.getString(2);
+                
+                if (getHexKey(newPass)) {
+                    wifi.wepKeys[0] = newPass;
+                }
+                else {
+                    wifi.wepKeys[0] = "\"" + newPass + "\"";
+                }
+                wifi.wepTxKeyIndex = 0;
+                
+                wifi.status = WifiConfiguration.Status.ENABLED;
+                wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+                wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+                wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+                wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+                wifi.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+                wifi.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+                wifi.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+                wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+                wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+                wifi.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+                wifi.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+
+                                
+                wifi.networkId = ssidToNetworkId(newSSID);
+
+                if ( wifi.networkId == -1 ) {
+                    wifiManager.addNetwork(wifi);
+                    callbackContext.success(newSSID + " successfully added.");
+                }
+                else {
+                    wifiManager.updateNetwork(wifi);
+                    callbackContext.success(newSSID + " successfully updated.");
+                }
+
+                wifiManager.saveConfiguration();
+                return true;
             }
             else if (authType.equals("NONE")) {
                 String newSSID = data.getString(0);
