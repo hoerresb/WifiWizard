@@ -248,10 +248,10 @@ var WifiWizard = {
         }
         cordova.exec(win, fail, 'WifiWizard', 'getConnectedSSID', []);
     },
-    
+
     getCurrentBSSID: function(win, fail) {
         if (typeof win != "function") {
-            console.log("getCurrentSSID first parameter must be a function to handle SSID.");
+            console.log("getCurrentSSID first parameter must be a function to handle BSSID.");
             return;
         }
         cordova.exec(win, fail, 'WifiWizard', 'getConnectedBSSID', []);
