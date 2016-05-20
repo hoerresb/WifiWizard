@@ -470,7 +470,7 @@ public class WifiWizard extends CordovaPlugin {
      *    @return    true if SSID found, false if not.
     */
     private boolean getConnectedSSID(CallbackContext callbackContext){
-        return  getWifiServiceInfo(CallbackContext callbackContext, false);
+        return  getWifiServiceInfo(callbackContext, false);
     }
 
     /**
@@ -480,7 +480,7 @@ public class WifiWizard extends CordovaPlugin {
      *    @return    true if SSID found, false if not.
     */
     private boolean getConnectedBSSID(CallbackContext callbackContext){
-        return getWifiServiceInfo(CallbackContext callbackContext, true);
+        return getWifiServiceInfo(callbackContext, true);
     }
 
     /**
