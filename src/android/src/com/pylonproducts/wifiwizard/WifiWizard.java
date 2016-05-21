@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,6 +43,7 @@ public class WifiWizard extends CordovaPlugin {
     private static final String START_SCAN = "startScan";
     private static final String GET_SCAN_RESULTS = "getScanResults";
     private static final String GET_CONNECTED_SSID = "getConnectedSSID";
+    private static final String GET_CONNECTED_BSSID = "getConnectedBSSID";
     private static final String IS_WIFI_ENABLED = "isWifiEnabled";
     private static final String SET_WIFI_ENABLED = "setWifiEnabled";
     private static final String TAG = "WifiWizard";
@@ -98,6 +99,9 @@ public class WifiWizard extends CordovaPlugin {
         }
         else if(action.equals(GET_CONNECTED_SSID)) {
             return this.getConnectedSSID(callbackContext);
+        }
+        else if(action.equals(GET_CONNECTED_BSSID)) {
+            return this.getConnectedBSSID(callbackContext);
         }
         else {
             callbackContext.error("Incorrect action parameter: " + action);
@@ -466,6 +470,28 @@ public class WifiWizard extends CordovaPlugin {
      *    @return    true if SSID found, false if not.
     */
     private boolean getConnectedSSID(CallbackContext callbackContext){
+        return  getWifiServiceInfo(callbackContext, false);
+    }
+
+    /**
+     * This method retrieves the BSSID for the currently connected network
+     *
+     *    @param    callbackContext        A Cordova callback context
+     *    @return    true if SSID found, false if not.
+    */
+    private boolean getConnectedBSSID(CallbackContext callbackContext){
+        return getWifiServiceInfo(callbackContext, true);
+    }
+
+    /**
+     * This method retrieves the WifiInformation for the (SSID or BSSID)
+     * currently connected network.
+     *
+     *    @param    callbackContext        A Cordova callback context
+     *    @param    basicIdentifier        A flag to get BSSID if true or SSID if false.
+     *    @return    true if SSID found, false if not.
+    */
+    private boolean getWifiServiceInfo(CallbackContext callbackContext, boolean basicIdentifier){
         if(!wifiManager.isWifiEnabled()){
             callbackContext.error("Wifi is disabled");
             return false;
@@ -478,19 +504,21 @@ public class WifiWizard extends CordovaPlugin {
             return false;
         }
 
-        String ssid = info.getSSID();
-        if(ssid.isEmpty()) {
-            ssid = info.getBSSID();
+        String serviceInfo;
+        if(basicIdentifier) {
+            serviceInfo = info.getBSSID();
+        } else {
+            serviceInfo = info.getSSID();
         }
-        if(ssid.isEmpty()){
-            callbackContext.error("SSID is empty");
+
+        if(serviceInfo.isEmpty()){
+            callbackContext.error("Wifi information is empty");
             return false;
         }
 
-        callbackContext.success(ssid);
+        callbackContext.success(serviceInfo);
         return true;
     }
-
     /**
      * This method retrieves the current WiFi status
      *
@@ -531,9 +559,9 @@ public class WifiWizard extends CordovaPlugin {
             Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
             return false;
         }
-        
+
         String status = "";
-        
+
         try {
             status = data.getString(0);
         }
@@ -542,11 +570,11 @@ public class WifiWizard extends CordovaPlugin {
             Log.d(TAG, e.getMessage());
             return false;
         }
-        
+
         if (wifiManager.setWifiEnabled(status.equals("true"))) {
             callbackContext.success();
             return true;
-        } 
+        }
         else {
             callbackContext.error("Cannot enable wifi");
             return false;
