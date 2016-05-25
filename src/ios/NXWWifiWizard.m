@@ -144,7 +144,7 @@
     CDVPluginResult *pluginResult = nil;
     NSString *isWifiOn = [self isWiFiEnabled] ? @"1" : @"0";
 
-    [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:isWifiOn];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:isWifiOn];
 
     [self.commandDelegate sendPluginResult:pluginResult
                                 callbackId:command.callbackId];
