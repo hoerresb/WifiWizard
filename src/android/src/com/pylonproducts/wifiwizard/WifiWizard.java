@@ -414,8 +414,13 @@ public class WifiWizard extends CordovaPlugin {
             callbackContext.error("SSID is empty");
             return false;
         }
+        
+        String surroundingQuotesRemovedIfAny = ssid.replaceAll("^\"|\"$", "");
+
+        ssid = surroundingQuotesRemovedIfAny;
 
         callbackContext.success(ssid);
+
         return true;
     }
 
