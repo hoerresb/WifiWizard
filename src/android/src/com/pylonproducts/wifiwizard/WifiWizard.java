@@ -30,6 +30,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.SupplicantState;
 import android.content.Context;
 import android.util.Log;
+import android.os.Build.VERSION;
 
 
 public class WifiWizard extends CordovaPlugin {
@@ -46,6 +47,7 @@ public class WifiWizard extends CordovaPlugin {
     private static final String IS_WIFI_ENABLED = "isWifiEnabled";
     private static final String SET_WIFI_ENABLED = "setWifiEnabled";
     private static final String TAG = "WifiWizard";
+    private static final int    API_VERSION = VERSION.SDK_INT;
 
     private WifiManager wifiManager;
     private CallbackContext callbackContext;
@@ -429,7 +431,17 @@ public class WifiWizard extends CordovaPlugin {
                 lvl.put("BSSID", scan.BSSID);
                 lvl.put("frequency", scan.frequency);
                 lvl.put("capabilities", scan.capabilities);
-               // lvl.put("timestamp", scan.timestamp);
+                lvl.put("timestamp", scan.timestamp);
+                
+                if (API_VERSION >= 23) { // Marshmallow
+                    lvl.put("channelWidth", scan.channelWidth);
+                    lvl.put("centerFreq0", scan.centerFreq0);
+                    lvl.put("centerFreq1", scan.centerFreq1);
+                } else {
+                    lvl.put("channelWidth", null);
+                    lvl.put("centerFreq0", null);
+                    lvl.put("centerFreq1", null);
+                }
                 returnList.put(lvl);
             } catch (JSONException e) {
                 e.printStackTrace();
