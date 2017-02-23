@@ -504,7 +504,7 @@ public class WifiWizard extends CordovaPlugin {
     private boolean getConnectedRouterIP(CallbackContext callbackContext) {
       if(!wifiManager.isWifiEnabled()) {
         callbackContext.error("Wifi is disabled");
-        return false
+        return false;
       }
 
       WifiInfo wifiInfo = wifiManager.getConnectionInfo();
