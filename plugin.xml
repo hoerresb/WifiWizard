@@ -40,7 +40,7 @@
 				<param name="ios-package" value="NXWWifiWizard"/>
 			</feature>
 		</config-file>
-		
+
 		<header-file src="src/ios/NXWWifiWizard.h"/>
 		<source-file src="src/ios/NXWWifiWizard.m"/>
 		<framework src="SystemConfiguration.framework" />

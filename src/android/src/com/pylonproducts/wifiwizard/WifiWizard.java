@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,6 +43,7 @@ public class WifiWizard extends CordovaPlugin {
     private static final String START_SCAN = "startScan";
     private static final String GET_SCAN_RESULTS = "getScanResults";
     private static final String GET_CONNECTED_SSID = "getConnectedSSID";
+    private static final String GET_CONNECTED_ROUTER_IP = "getConnectedRouterIP";
     private static final String IS_WIFI_ENABLED = "isWifiEnabled";
     private static final String SET_WIFI_ENABLED = "setWifiEnabled";
     private static final String TAG = "WifiWizard";
@@ -98,6 +99,9 @@ public class WifiWizard extends CordovaPlugin {
         }
         else if(action.equals(GET_CONNECTED_SSID)) {
             return this.getConnectedSSID(callbackContext);
+        }
+        else if(action.equals(GET_CONNECTED_ROUTER_IP)) {
+          return this.getConnectedRouterIp(callbackContext);
         }
         else {
             callbackContext.error("Incorrect action parameter: " + action);
@@ -492,6 +496,43 @@ public class WifiWizard extends CordovaPlugin {
     }
 
     /**
+     * This method retrieves the IP of the connected router
+     *
+     *    @param    callbackContext       A Cordova callback context
+     *    @return   true if IP found, false if not
+    */
+    private boolean getConnectedRouterIP(CallbackContext callbackContext) {
+      if(!wifiManager.isWifiEnabled()) {
+        callbackContext.error("Wifi is disabled");
+        return false
+      }
+
+      WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+      if(wifiInfo == null){
+          callbackContext.error("Unable to read wifi info");
+          return false;
+      }
+
+      int ip = wifiInfo.getIpAddress();
+
+      String ipString = String.format(
+        "%d.%d.%d.%d",
+        (ip & 0xff),
+        (ip >> 8 & 0xff),
+        (ip >> 16 & 0xff),
+        (ip >> 24 & 0xff)
+      );
+
+      if(ipString.isEmpty()){
+        callbackContext.error("IP is empty");
+        return false;
+      }
+
+      callbackContext.success(ipString);
+      return true;
+    }
+
+    /**
      * This method retrieves the current WiFi status
      *
      *    @param    callbackContext        A Cordova callback context
@@ -531,9 +572,9 @@ public class WifiWizard extends CordovaPlugin {
             Log.d(TAG, "WifiWizard: disconnectNetwork invalid data");
             return false;
         }
-        
+
         String status = "";
-        
+
         try {
             status = data.getString(0);
         }
@@ -542,11 +583,11 @@ public class WifiWizard extends CordovaPlugin {
             Log.d(TAG, e.getMessage());
             return false;
         }
-        
+
         if (wifiManager.setWifiEnabled(status.equals("true"))) {
             callbackContext.success();
             return true;
-        } 
+        }
         else {
             callbackContext.error("Cannot enable wifi");
             return false;
