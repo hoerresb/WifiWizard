@@ -4,7 +4,7 @@ Version 0.2.10
 
 `getCurrentBSSID` now available on IOS.
 
-~~Fixed callback issue with `connectNetwork`.~~
+Fixed callback issue with `connectNetwork`. It now checks to make sure you are connected to the specific network before returning.
 
 Updated permissions for Android Marshmallow.
 
@@ -22,7 +22,7 @@ Run `phonegap plugin install https://github.com/parsonsmatt/WifiWizard.git`. Ple
 
 #### Releases
 
-Run `cordova plugin add wifiwizard`. This will get the latest release of the plugin.
+Run `cordova plugin add com.pylonproducts.wifiwizard`. This will get the latest release of the plugin.
 
 ### Usage from within Cordova/Phonegap:
 
@@ -44,7 +44,7 @@ Removes the network with the given SSID. As above, `win` and `fail` are callback
 
 #### `WifiWizard.connectNetwork(SSID, win, fail);` 
 
-Connects the phone to the given Wifi network. Returns the value of the Supplicant State.
+Connects the phone to the given Wifi network.
 
 #### `WifiWizard.disconnectNetwork(SSID, win, fail);` 
 
@@ -68,6 +68,7 @@ Retrieves a list of the available networks as an array of objects and passes the
             "BSSID": bssid // MAC address of WiFi router as string
             "frequency": frequency of the access point channel in MHz
             "capabilities": capabilities // Describes the authentication, key management, and encryption schemes supported by the access point.
+            "timestamp": timestamp in microseconds (since boot) when this result was last seen.
         }
     ]
 
@@ -80,6 +81,10 @@ An options object may be passed. Currently, the only supported option is `numLev
 #### `WifiWizard.getCurrentSSID(ssidHandler, fail);` 
 
 Retrieves the current SSID and passes it to ssidHandler.
+
+#### `WifiWizard.getCurrentRouterIP(ipHandler, fail);`
+
+Retrieves the current IP of the connected router and passes it to ipHandler.
 
 #### `WifiWizard.isWifiEnabled(win, fail);` 
 
