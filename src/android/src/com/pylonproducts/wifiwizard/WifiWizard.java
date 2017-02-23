@@ -101,7 +101,7 @@ public class WifiWizard extends CordovaPlugin {
             return this.getConnectedSSID(callbackContext);
         }
         else if(action.equals(GET_CONNECTED_ROUTER_IP)) {
-          return this.getConnectedRouterIp(callbackContext);
+            return this.getConnectedRouterIP(callbackContext);
         }
         else {
             callbackContext.error("Incorrect action parameter: " + action);
@@ -128,7 +128,6 @@ public class WifiWizard extends CordovaPlugin {
             // data's order for ANY object is 0: ssid, 1: authentication algorithm,
             // 2+: authentication information.
             String authType = data.getString(1);
-
 
             if (authType.equals("WPA")) {
                 // WPA Data format:
@@ -502,34 +501,34 @@ public class WifiWizard extends CordovaPlugin {
      *    @return   true if IP found, false if not
     */
     private boolean getConnectedRouterIP(CallbackContext callbackContext) {
-      if(!wifiManager.isWifiEnabled()) {
-        callbackContext.error("Wifi is disabled");
-        return false;
-      }
+        if(!wifiManager.isWifiEnabled()) {
+            callbackContext.error("Wifi is disabled");
+            return false;
+        }
 
-      WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-      if(wifiInfo == null){
-          callbackContext.error("Unable to read wifi info");
-          return false;
-      }
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        if(wifiInfo == null){
+            callbackContext.error("Unable to read wifi info");
+            return false;
+        }
 
-      int ip = wifiInfo.getIpAddress();
+        int ip = wifiInfo.getIpAddress();
 
-      String ipString = String.format(
-        "%d.%d.%d.%d",
-        (ip & 0xff),
-        (ip >> 8 & 0xff),
-        (ip >> 16 & 0xff),
-        (ip >> 24 & 0xff)
-      );
+        String ipString = String.format(
+            "%d.%d.%d.%d",
+            (ip & 0xff),
+            (ip >> 8 & 0xff),
+            (ip >> 16 & 0xff),
+            (ip >> 24 & 0xff)
+        );
 
-      if(ipString.isEmpty()){
-        callbackContext.error("IP is empty");
-        return false;
-      }
+        if(ipString.isEmpty()){
+            callbackContext.error("IP is empty");
+            return false;
+        }
 
-      callbackContext.success(ipString);
-      return true;
+        callbackContext.success(ipString);
+        return true;
     }
 
     /**
