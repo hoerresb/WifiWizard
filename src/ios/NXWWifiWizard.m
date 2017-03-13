@@ -110,11 +110,13 @@
     
     NSString *bssid = [r objectForKey:(id)@"BSSID"]; //@"BSSID"
     NSLog(@"Got BBSID %@", bssid);
-    NSLog(@"Length BBSID %@", [bssid length]);
+
     
     if (bssid && [bssid length]) {
+        NSLog(@"got plugin result BBSID %@", bssid);
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:bssid];
     } else {
+        NSLog(@"Not available");
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Not available"];
     }
     
