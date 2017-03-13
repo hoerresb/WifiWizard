@@ -108,7 +108,7 @@
     CDVPluginResult *pluginResult = nil;
     NSDictionary *r = [self fetchSSIDInfo];
     
-    NSString *bssid = [r objectForKey:(id)kCNNetworkInfoKeyBSSID]; //@"SSID"
+    NSString *bssid = [r objectForKey:(id)"BSSID"]; //@"SSID"
     
     if (bssid && [bssid length]) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:bssid];
