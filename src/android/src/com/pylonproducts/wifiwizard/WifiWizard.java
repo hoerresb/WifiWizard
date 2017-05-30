@@ -100,7 +100,7 @@ public class WifiWizard extends CordovaPlugin {
         else if(action.equals(GET_CONNECTED_SSID)) {
             return this.getConnectedSSID(callbackContext);
         }else if(action.equals(GET_CONNECTED_BSSID)) {
-            return this.getConnectedSSID(callbackContext);
+            return this.getConnectedBSSID(callbackContext);
         }
         else {
             callbackContext.error("Incorrect action parameter: " + action);
