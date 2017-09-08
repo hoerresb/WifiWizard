@@ -1,7 +1,7 @@
 # Fork
 
 ```
-This fork solves issue with names in Ionic package.json. Especially convinient with automatic builds. 
+This fork solves issue with plugin naming in Ionic package.json. Especially convinient with automatic builds. 
 ```
 
 # WifiWizard
