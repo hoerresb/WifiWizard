@@ -1,3 +1,9 @@
+# Fork
+
+```
+This fork solves issue with plugin naming in Ionic package.json. Especially convinient with automatic builds. 
+```
+
 # WifiWizard
 
 Version 0.2.10

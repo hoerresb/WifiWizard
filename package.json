@@ -3,7 +3,7 @@
   "version": "0.2.11",
   "description": "This plugin allows Phonegap applications to manage Wifi connections.",
   "cordova": {
-    "id": "com.pylonproducts.wifiwizard",
+    "id": "wifiwizard",
     "platforms": [
       "android",
       "ios"
