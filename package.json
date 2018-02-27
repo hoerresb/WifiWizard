@@ -1,5 +1,5 @@
 {
-  "name": "wifiwizard",
+  "name": "com.pylonproducts.wifiwizard",
   "version": "0.2.11",
   "description": "This plugin allows Phonegap applications to manage Wifi connections.",
   "cordova": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/parsonsmatt/wifiwizard.git"
+    "url": "git+https://github.com/leighwoltman/wifiwizard.git"
   },
   "keywords": [
     "phonegap",
@@ -24,7 +24,7 @@
   "author": "Matt Parsons",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/parsonsmatt/wifiwizard/issues"
+    "url": "https://github.com/leighwoltman/wifiwizard/issues"
   },
-  "homepage": "https://github.com/parsonsmatt/wifiwizard#readme"
+  "homepage": "https://github.com/leighwoltman/wifiwizard#readme"
 }
