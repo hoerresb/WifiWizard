@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/leighwoltman/Wifiwizard.git"
+    "url": "git+https://github.com/leighwoltman/Wifiwizard.git"
   },
   "keywords": [
     "phonegap",
