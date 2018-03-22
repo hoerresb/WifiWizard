@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leighwoltman/Wifiwizard.git"
+    "url": "https://github.com/leighwoltman/Wifiwizard.git"
   },
   "keywords": [
     "phonegap",
@@ -24,7 +24,7 @@
   "author": "Matt Parsons",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/leighwoltman/wifiwizard/issues"
+    "url": "https://github.com/leighwoltman/Wifiwizard/issues"
   },
-  "homepage": "https://github.com/leighwoltman/wifiwizard#readme"
+  "homepage": "https://github.com/leighwoltman/Wifiwizard#readme"
 }
