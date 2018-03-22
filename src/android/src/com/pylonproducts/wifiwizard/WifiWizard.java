@@ -487,7 +487,7 @@ public class WifiWizard extends CordovaPlugin {
             return false;
         }
 
-        callbackContext.success(ssid);
+        callbackContext.success(ssid.substring(1, ssid.length()-1));
         return true;
     }
 
