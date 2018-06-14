@@ -109,11 +109,11 @@
     NSDictionary *r = [self fetchSSIDInfo];
     
     NSString *bssid = [r objectForKey:(id)@"BSSID"]; //@"BSSID"
-    NSLog(@"Got BBSID %@", bssid);
+    
 
     
     if (bssid && [bssid length]) {
-        NSLog(@"got plugin result BBSID %@", bssid);
+        
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:bssid];
     } else {
         NSLog(@"Not available");
