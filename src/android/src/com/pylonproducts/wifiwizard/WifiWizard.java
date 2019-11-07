@@ -466,29 +466,42 @@ public class WifiWizard extends CordovaPlugin {
      *    @return    true if SSID found, false if not.
     */
     private boolean getConnectedSSID(CallbackContext callbackContext){
-        if(!wifiManager.isWifiEnabled()){
-            callbackContext.error("Wifi is disabled");
-            return false;
-        }
+        try {
+            if(!wifiManager.isWifiEnabled()){
+                callbackContext.error("Wifi is disabled");
+                return false;
+            }
 
-        WifiInfo info = wifiManager.getConnectionInfo();
+            WifiInfo info = wifiManager.getConnectionInfo();
 
-        if(info == null){
-            callbackContext.error("Unable to read wifi info");
-            return false;
-        }
+            if(info == null){
+                callbackContext.error("Unable to read wifi info");
+                return false;
+            }
 
-        String ssid = info.getSSID();
-        if(ssid.isEmpty()) {
-            ssid = info.getBSSID();
+            String ssid = info.getSSID();
+            if(ssid.isEmpty()) {
+                ssid = info.getBSSID();
+            }
+            
+            if(ssid.length() > 1) {
+                if(ssid.charAt(0) == '"' && ssid.charAt(ssid.length()-1) == '"') {
+                    ssid = ssid.substring(1, ssid.length()-1);
+                }
+            }
+
+            if(ssid.isEmpty()){
+                callbackContext.error("SSID is empty");
+                return false;
+            }
+
+            callbackContext.success(ssid);
+            return true;
         }
-        if(ssid.isEmpty()){
+        catch (Exception e) {
             callbackContext.error("SSID is empty");
             return false;
         }
-
-        callbackContext.success(ssid.substring(1, ssid.length()-1));
-        return true;
     }
 
     /**
