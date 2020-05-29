@@ -1,5 +1,6 @@
 #import "NXWWifiWizard.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
+#import <CoreLocation/CoreLocation.h>
 
 @implementation NXWWifiWizard
 
@@ -127,6 +128,25 @@
     CDVPluginResult *pluginResult = nil;
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Not supported"];
+
+    [self.commandDelegate sendPluginResult:pluginResult
+                                callbackId:command.callbackId];
+}
+
+- (void)checkLocationPermission:(CDVInvokedUrlCommand*)command {
+    CDVPluginResult *pluginResult = nil;
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Denied"];
+
+    if ([CLLocationManager locationServicesEnabled]) {
+        NSLog(@"Location Services Enabled");
+        if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorized 
+            || [CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedAlways 
+            || [CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedWhenInUse
+            ){
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Granted"];
+        }
+    }
 
     [self.commandDelegate sendPluginResult:pluginResult
                                 callbackId:command.callbackId];

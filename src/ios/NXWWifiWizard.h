@@ -14,5 +14,6 @@
 - (void)getConnectedBSSID:(CDVInvokedUrlCommand*)command;
 - (void)isWifiEnabled:(CDVInvokedUrlCommand*)command;
 - (void)setWifiEnabled:(CDVInvokedUrlCommand*)command;
+- (void)checkLocationPermission:(CDVInvokedUrlCommand*)command;
 
 @end

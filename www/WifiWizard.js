@@ -289,6 +289,20 @@ var WifiWizard = {
             return;
         }
         cordova.exec(win, fail, 'WifiWizard', 'setWifiEnabled', [enabled]);
+    },
+
+    /**
+     *  Gets 'Denied'/'Granted' if Locations Permission is available
+     * @param   enabled	callback function
+     * @param 	win	callback function
+     * @param 	fail	callback function if wifi is disabled
+     */
+    checkLocationPermission: function(win, fail) {
+        if (typeof win != "function") {
+            console.log("checkLocationPermission first parameter must be a function to handle SSID.");
+            return;
+        }
+        cordova.exec(win, fail, 'WifiWizard', 'checkLocationPermission', []);
     }
 };
 
